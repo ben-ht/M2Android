@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">FicheHEMBERT</string>
+    <string name="inconnu">Inconnu</string>
+    <string name="fiche_contact">FICHE CONTACT</string>
+    <string name="nom">Nom :</string>
+    <string name="prenom">Prénom :</string>
+    <string name="telephone">Téléphone :</string>
+    <string name="numero">Numéro :</string>
+    <string name="rue">Rue :</string>
+    <string name="code_postal">Code postal :</string>
+    <string name="ville">Ville :</string>
+    <string name="modifier_identite">MODIFIER IDENTITE</string>
+    <string name="modifier_adresse">MODIFIER ADRESSE</string>
+    <string name="saisie_identite">SAISIE IDENTITE</string>
+    <string name="saisie_adresse">SAISIE ADRESSE</string>
+    <string name="annuler">ANNULER</string>
+    <string name="ok">OK</string>
+</resources>

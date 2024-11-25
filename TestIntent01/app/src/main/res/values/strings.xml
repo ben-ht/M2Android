@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TestIntent01</string>
+    <string name="default_textResult_content">Rien reçu</string>
+</resources>
