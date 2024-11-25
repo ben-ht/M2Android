@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FicheHEMBERT"
         tools:targetApi="31">
         <activity
+            android:name=".EditAddressActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditIdentityActivity"
             android:exported="false" />
         <activity

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">CalcHembert</string>
+    <string name="copyright">Copyright Benjamin Hembert 2024/2025</string>
+    <string name="divided">divisé</string>
+    <string name="division_zero_error">Erreur - division par 0</string>
+    <string name="equals">=</string>
+    <string name="fill_inputs_error">Complétez les 2 opérandes</string>
+    <string name="input_placeholder">Entrez une valeur</string>
+    <string name="minus">moins</string>
+    <string name="multiplied">multiplié</string>
+    <string name="notANumber">NaN</string>
+    <string name="plus">plus</string>
+    <string name="quit">Quitter</string>
+    <string name="reset">Raz</string>
+    <string name="result">Résultat</string>
+    <string name="select_operator_error">Sélectionnez un opérateur</string>
+    <style name="Base.Theme.CalcHembert" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+    </style>
+    <style name="Theme.CalcHembert" parent="Base.Theme.CalcHembert"/>
+</resources>

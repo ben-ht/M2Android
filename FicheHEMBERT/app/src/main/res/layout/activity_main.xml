@@ -38,7 +38,7 @@
                 android:text="@string/nom" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/nom"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
@@ -53,7 +53,7 @@
                 android:text="@string/prenom" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/prenom"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
@@ -68,7 +68,7 @@
                 android:text="@string/telephone" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/telephone"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
@@ -105,7 +105,7 @@
                 android:text="@string/numero" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/numero"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
@@ -120,7 +120,7 @@
                 android:text="@string/rue" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/rue"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
@@ -135,7 +135,7 @@
                 android:text="@string/code_postal" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/code_postal"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
@@ -150,7 +150,7 @@
                 android:text="@string/ville" />
 
             <TextView
-                android:gravity="end"
+                android:id="@+id/ville"
                 android:hint="@string/inconnu"
                 android:padding="3dip" />
         </TableRow>
