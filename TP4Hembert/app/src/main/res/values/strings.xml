@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TP4HEMBERT</string>
+    <string name="implicit_intent_title">Intentions Implicites</string>
+    <string name="call">Appeler</string>
+    <string name="sms">SMS</string>
+    <string name="mms">MMS</string>
+    <string name="web">WEB</string>
+    <string name="geo">GEO</string>
+    <string name="error_app_unavailable">Impossible d\'effectuer l\'action sur cet appareil</string>
+</resources>
