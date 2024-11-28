@@ -7,4 +7,24 @@
     <string name="web">WEB</string>
     <string name="geo">GEO</string>
     <string name="error_app_unavailable">Impossible d\'effectuer l\'action sur cet appareil</string>
+    <string name="call_activity_title">Saisie Téléphone</string>
+    <string name="message_activity_title">Saisie d\'un message</string>
+    <string name="web_activity_title">Saisie URL</string>
+    <string name="geo_activity_title">Saisie Coordonnées</string>
+    <string name="numero_label">Numéro</string>
+    <string name="numero_placeholder">Saisir un numéro</string>
+    <string name="message_label">Message</string>
+    <string name="message_placeholder">Saisir votre message</string>
+    <string name="url_label">URL</string>
+    <string name="url_placeholder">Saisir une URL</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="latitude_placeholder">Saisir une latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="longitude_placeholder">Saisir une longitude</string>
+    <string name="cancel">ANNULER</string>
+    <string name="validate">VALIDER</string>
+    <string name="numero_error_message">"Veuillez saisir un numéro de téléphone"</string>
+    <string name="numero_and_message_error_message">"Veuillez saisir un numéro de téléphone et le contenu du message"</string>
+    <string name="url_error_message">"Veuillez saisir une URL"</string>
+    <string name="coordinates_error_message">"Veuillez saisir une latitude et une longitude"</string>
 </resources>

@@ -14,13 +14,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Vue principale
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private Button callBtn;
-    private Button smsBtn;
-    private Button mmsBtn;
-    private Button webBtn;
-    private Button geoBtn;
+    private final static String SMS = "sms";
+    private final static String MMS = "mms";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,48 +36,74 @@ public class MainActivity extends AppCompatActivity {
         addButtonHandlers();
     }
 
+    /**
+     * Ajoute à chaque bouton son événement onClick
+     */
     private void addButtonHandlers(){
-        callBtn = findViewById(R.id.callBtn);
-        callBtn.setOnClickListener(buttonHandler(callBtn));
+        Button callBtn = findViewById(R.id.callBtn);
+        callBtn.setOnClickListener(callButtonHandler());
 
-        smsBtn = findViewById(R.id.smsBtn);
-        smsBtn.setOnClickListener(buttonHandler(smsBtn));
+        Button smsBtn = findViewById(R.id.smsBtn);
+        smsBtn.setOnClickListener(messageButtonHandler(SMS));
 
-        mmsBtn = findViewById(R.id.mmsBtn);
-        mmsBtn.setOnClickListener(buttonHandler(mmsBtn));
+        Button mmsBtn = findViewById(R.id.mmsBtn);
+        mmsBtn.setOnClickListener(messageButtonHandler(MMS));
 
-        webBtn = findViewById(R.id.webBtn);
-        webBtn.setOnClickListener(buttonHandler(webBtn));
+        Button webBtn = findViewById(R.id.webBtn);
+        webBtn.setOnClickListener(webButtonHandler());
 
-        geoBtn = findViewById(R.id.geoBtn);
-        geoBtn.setOnClickListener(buttonHandler(geoBtn));
+        Button geoBtn = findViewById(R.id.geoBtn);
+        geoBtn.setOnClickListener(geoButtonHandler());
     }
 
-    private View.OnClickListener buttonHandler(Button btn){
+    /**
+     * Ouvre la page d'appel
+     */
+    private View.OnClickListener callButtonHandler(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (btn.getId() == callBtn.getId()){
-                    Intent call = new Intent();
-                    call.setAction(Intent.ACTION_DIAL);
-                    Uri phoneNumber = Uri.parse("tel:0102030405");
-                    call.setData(phoneNumber);
-                    try {
-                        startActivity(call);
-                    } catch (ActivityNotFoundException e){
-                        Toast.makeText(MainActivity.this, R.string.error_app_unavailable, Toast.LENGTH_SHORT).show();
-                    }
-                } else if (btn.getId() == smsBtn.getId()){
-                    Intent sms = new Intent();
-                    sms.setAction(Intent.ACTION_SENDTO);
-                    Uri phoneNumber = Uri.parse("sms:0102030405");
-                    sms.setData(phoneNumber);
-                    try {
-                        startActivity(sms);
-                    } catch (ActivityNotFoundException e){
-                        Toast.makeText(MainActivity.this, R.string.error_app_unavailable, Toast.LENGTH_SHORT).show();
-                    }
-                }
+                startActivity(new Intent(MainActivity.this, CallActivity.class));
+            }
+        };
+    }
+
+    /**
+     * Ouvre la page de message
+     * @param schema Schema de l'intention (sms ou mms)
+     */
+    private View.OnClickListener messageButtonHandler(String schema){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent message = new Intent(MainActivity.this, MessageActivity.class);
+                message.putExtra(IntentKeys.KEY_SCHEMA, schema);
+                startActivity(message);
+            }
+        };
+    }
+
+    /**
+     * Ouvre la page permettant d'ouvrir un navigateur
+     */
+    private View.OnClickListener webButtonHandler(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, WebActivity.class));
+            }
+        };
+    }
+
+    /**
+     * Ouvre la page permettant d'ouvrir une carte à une position
+     * @return
+     */
+    private View.OnClickListener geoButtonHandler(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, GeoActivity.class));
             }
         };
     }
