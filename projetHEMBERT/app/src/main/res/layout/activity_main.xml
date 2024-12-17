@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/dungeon_master"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/dungeon_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/_01"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <Button
+        android:id="@+id/dungeon_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_02"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_1"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_3"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_1" />
+
+    <Button
+        android:id="@+id/dungeon_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_03"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_1"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_4"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_2" />
+
+    <Button
+        android:id="@+id/dungeon_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_04"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_3" />
+
+    <Button
+        android:id="@+id/dungeon_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_05"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_6"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dungeon_1" />
+
+    <Button
+        android:id="@+id/dungeon_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_06"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_5"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_7"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_5" />
+
+    <Button
+        android:id="@+id/dungeon_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_07"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_5"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_8"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_6" />
+
+    <Button
+        android:id="@+id/dungeon_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_08"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_7" />
+
+    <Button
+        android:id="@+id/dungeon_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_09"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_10"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dungeon_5" />
+
+    <Button
+        android:id="@+id/dungeon_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_10"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_9"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_11"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_9" />
+
+    <Button
+        android:id="@+id/dungeon_11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_11"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_10"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_12"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_10" />
+
+    <Button
+        android:id="@+id/dungeon_12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_12"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_11" />
+
+    <Button
+        android:id="@+id/dungeon_13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_13"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_14"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dungeon_9" />
+
+    <Button
+        android:id="@+id/dungeon_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_14"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_13"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_15"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_13" />
+
+    <Button
+        android:id="@+id/dungeon_15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_15"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_14"
+        app:layout_constraintEnd_toStartOf="@+id/dungeon_16"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_14" />
+
+    <Button
+        android:id="@+id/dungeon_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_16"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dungeon_15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dungeon_15" />
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="282dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dungeon_13">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:padding="3dip"
+                android:text="Pièces non explorées" />
+
+            <TextView
+                android:padding="3dip"
+                android:text=": 16" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:padding="3dip"
+                android:text="Puissance" />
+
+            <TextView
+                android:padding="3dip"
+                android:text=": 100" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:padding="3dip"
+                android:text="Points de vie" />
+
+            <TextView
+                android:padding="3dip"
+                android:text=": 10" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/fight_result_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fight_result"
+        android:textSize="18sp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+    <TextView
+        android:id="@+id/fight_result_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/waiting"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fight_result_title" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

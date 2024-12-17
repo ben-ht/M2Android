@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">projetHEMBERT</string>
+    <string name="dungeon_master">Maître du donjon</string>
+    <string name="_01">01</string>
+    <string name="_02">02</string>
+    <string name="_03">03</string>
+    <string name="_04">04</string>
+    <string name="_05">05</string>
+    <string name="_06">06</string>
+    <string name="_07">07</string>
+    <string name="_08">08</string>
+    <string name="_09">09</string>
+    <string name="_10">10</string>
+    <string name="_11">11</string>
+    <string name="_12">12</string>
+    <string name="_13">13</string>
+    <string name="_14">14</string>
+    <string name="_15">15</string>
+    <string name="_16">16</string>
+    <string name="fight_result"><b>Résultat du Combat</b></string>
+    <string name="waiting">En attente…</string>
+</resources>
