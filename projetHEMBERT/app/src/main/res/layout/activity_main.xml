@@ -183,11 +183,11 @@
 
             <TextView
                 android:padding="3dip"
-                android:text="Pièces non explorées" />
+                android:text="@string/unexplored_rooms" />
 
             <TextView
                 android:padding="3dip"
-                android:text=": 16" />
+                android:text="@string/_16" />
         </TableRow>
 
         <TableRow
@@ -196,11 +196,11 @@
 
             <TextView
                 android:padding="3dip"
-                android:text="Puissance" />
+                android:text="@string/power__colon" />
 
             <TextView
                 android:padding="3dip"
-                android:text=": 100" />
+                android:text="@string/_100" />
         </TableRow>
 
         <TableRow
@@ -209,11 +209,11 @@
 
             <TextView
                 android:padding="3dip"
-                android:text="Points de vie" />
+                android:text="@string/health__colon" />
 
             <TextView
                 android:padding="3dip"
-                android:text=": 10" />
+                android:text="@string/_10" />
         </TableRow>
 
     </TableLayout>

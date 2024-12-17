@@ -17,6 +17,16 @@
     <string name="_14">14</string>
     <string name="_15">15</string>
     <string name="_16">16</string>
+    <string name="_100">100</string>
     <string name="fight_result"><b>Résultat du Combat</b></string>
     <string name="waiting">En attente…</string>
+    <string name="health__colon">Points de vie :</string>
+    <string name="power__colon">Puissance :</string>
+    <string name="unexplored_rooms">Pièces non explorées :</string>
+    <string name="player">JOUEUR</string>
+    <string name="power">Puissance</string>
+    <string name="health">Points de vie</string>
+    <string name="opponent">ADVERSAIRE</string>
+    <string name="attack">Attaque</string>
+    <string name="flee">Fuite</string>
 </resources>
