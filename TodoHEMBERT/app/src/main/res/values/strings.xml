@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TodoHEMBERT</string>
+    <string name="task_to_add">Tâche à ajouter</string>
+    <string name="task_label">Libellé de la tâche</string>
+    <string name="cancel">ANNULER</string>
+    <string name="add">AJOUTER</string>
+</resources>

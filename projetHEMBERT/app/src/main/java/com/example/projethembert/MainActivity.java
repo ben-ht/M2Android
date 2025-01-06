@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button dungeon1 = findViewById(R.id.dungeon_1);
-        dungeon1.setOnClickListener(openFightActivity());
+        startGame();
+        registerButtons();
     }
 
 
@@ -34,8 +35,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, DungeonActivity.class);
+                intent.putExtra(IntentKeys.PLAYER, player);
                 startActivity(intent);
             }
         };
+    }
+
+    private void startGame(){
+        player = new Player();
+    }
+
+    private void registerButtons(){
+        int[] buttonsId = {R.id.dungeon_1, R.id.dungeon_2, R.id.dungeon_3,
+        R.id.dungeon_4, R.id.dungeon_5, R.id.dungeon_6, R.id.dungeon_7,
+        R.id.dungeon_8, R.id.dungeon_9, R.id.dungeon_10, R.id.dungeon_11,
+        R.id.dungeon_12, R.id.dungeon_13, R.id.dungeon_14, R.id.dungeon_15,
+        R.id.dungeon_16};
+
+        for (int id : buttonsId){
+            Button button = findViewById(id);
+            button.setOnClickListener(openFightActivity());
+        }
     }
 }
