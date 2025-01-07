@@ -19,7 +19,14 @@ public class Player implements Serializable {
     }
 
     public boolean fight(Opponent opponent){
-        return (power * Math.random() - opponent.getPower() * Math.random()) >= 0;
+        boolean playerWins = (power * Math.random() - opponent.getPower() * Math.random()) >= 0;
+        if (playerWins){
+            power += 10;
+        } else {
+            health -= 3;
+        }
+
+        return playerWins;
     }
 
     public void flee(){
