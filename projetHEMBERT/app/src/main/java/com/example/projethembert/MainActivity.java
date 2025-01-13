@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK){
                         Intent intent = result.getData();
-                        player = (Player)intent.getSerializableExtra(IntentKeys.PLAYER);
-                        FightResult fightResult = (FightResult) intent.getSerializableExtra(IntentKeys.FIGHT_RESULT);
+                        player = intent.getParcelableExtra(IntentKeys.PLAYER);
+                        FightResult fightResult = intent.getParcelableExtra(IntentKeys.FIGHT_RESULT);
                         handleFightResult(fightResult);
                     }
                 }

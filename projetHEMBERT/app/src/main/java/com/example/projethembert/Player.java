@@ -1,8 +1,11 @@
 package com.example.projethembert;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Player implements Serializable {
+import androidx.annotation.NonNull;
+
+public class Player implements Parcelable {
     private final static int DEFAUlT_POWER = 100;
     private final static int DEFAULT_HEALTH = 10;
     private int power;
@@ -40,4 +43,32 @@ public class Player implements Serializable {
     public int getPower() {
         return power;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(power);
+        dest.writeInt(health);
+    }
+
+    protected Player(Parcel source){
+        power = source.readInt();
+        health = source.readInt();
+    }
+
+    public static final Creator<Player> CREATOR = new Creator<Player>() {
+        @Override
+        public Player createFromParcel(Parcel source) {
+            return new Player(source);
+        }
+
+        @Override
+        public Player[] newArray(int size) {
+            return new Player[size];
+        }
+    };
 }

@@ -29,8 +29,8 @@ public class RoomActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        player = (Player)intent.getSerializableExtra(IntentKeys.PLAYER);
-        opponent = (Opponent)intent.getSerializableExtra(IntentKeys.OPPONENT);
+        player = intent.getParcelableExtra(IntentKeys.PLAYER);
+        opponent = intent.getParcelableExtra(IntentKeys.OPPONENT);
         room = intent.getIntExtra(IntentKeys.ROOM, -1);
 
         Button attackBtn = findViewById(R.id.attack);
