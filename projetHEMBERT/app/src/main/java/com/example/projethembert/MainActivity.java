@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void tryEndGame(){
-        if (opponents.stream().allMatch(Objects::isNull)){
+        if (unexploredRooms.getText() == "0"){
             fightResultLabel.setText("Victoire");
             disableButtonClick();
         }
