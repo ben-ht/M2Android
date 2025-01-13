@@ -32,4 +32,12 @@ public class Player implements Serializable {
     public void flee(){
         health--;
     }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getPower() {
+        return power;
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.projethembert;
 
-public class Opponent {
+import java.io.Serializable;
+
+public class Opponent implements Serializable {
     private int power;
 
     public Opponent(){
