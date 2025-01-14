@@ -1,4 +1,4 @@
-package com.example.projethembert;
+package com.example.projethembert.utils;
 
 public class IntentKeys {
     public static String PLAYER = "player";

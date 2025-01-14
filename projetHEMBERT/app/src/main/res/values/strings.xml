@@ -1,22 +1,7 @@
 <resources>
     <string name="app_name">projetHEMBERT</string>
     <string name="dungeon_master">Maître du donjon</string>
-    <string name="_01">01</string>
-    <string name="_02">02</string>
-    <string name="_03">03</string>
-    <string name="_04">04</string>
-    <string name="_05">05</string>
-    <string name="_06">06</string>
-    <string name="_07">07</string>
-    <string name="_08">08</string>
-    <string name="_09">09</string>
     <string name="_10">10</string>
-    <string name="_11">11</string>
-    <string name="_12">12</string>
-    <string name="_13">13</string>
-    <string name="_14">14</string>
-    <string name="_15">15</string>
-    <string name="_16">16</string>
     <string name="_100">100</string>
     <string name="fight_result"><b>Résultat du Combat</b></string>
     <string name="waiting">En attente…</string>
@@ -29,4 +14,16 @@
     <string name="opponent">ADVERSAIRE</string>
     <string name="attack">Attaque</string>
     <string name="flee">Fuite</string>
+    <string name="waiting_">En attente…</string>
+    <string name="victory">Victoire</string>
+    <string name="defeat">Défaite</string>
+    <string name="fight_won">Vous avez remporté le combat</string>
+    <string name="fight_lost">Vous avez perdu le combat</string>
+    <string name="fight_fled">Vous avez fui</string>
+    <string name="monster_assassin">Assassin</string>
+    <string name="monster_orc">Orc</string>
+    <string name="monster_dragon">Dragon</string>
+    <string name="monster_vampire">Vampire</string>
+    <string name="room_already_explored">Cette salle à déja été explorée</string>
+    <string name="image_of_the_monster">Image of the monster</string>
 </resources>
