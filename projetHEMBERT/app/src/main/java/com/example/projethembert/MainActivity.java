@@ -1,13 +1,21 @@
 package com.example.projethembert;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleFightResult(FightResult fightResult) {
         GridLayout grid = findViewById(R.id.buttonsGrid);
+        ImageButton clearedRoomBtn = (ImageButton) grid.getChildAt(fightResult.room - 1);
         if (fightResult.result == FightResult.FightResultEnum.WON) {
             String unexploredRoomsCount = String.valueOf(Integer.parseInt(unexploredRooms.getText().toString()) - 1);
             unexploredRooms.setText(unexploredRoomsCount);
             opponents.set(fightResult.room - 1, null);
-            Button clearedRoomBtn = (Button) grid.getChildAt(fightResult.room - 1);
-            clearedRoomBtn.setText("X");
+            clearedRoomBtn.setImageResource(R.drawable.cross_mark);
             power.setText(String.valueOf(player.getPower()));
         } else {
+            clearedRoomBtn.setImageResource(R.drawable.dungeon_gate);
             health.setText(String.valueOf(player.getHealth()));
         }
 
@@ -129,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     private void init(){
         player = new Player();
         for (int i = 0; i < NB_ROOMS; i++){
-            opponents.add(new Opponent());
+            opponents.add(i, new Opponent());
         }
 
         unexploredRooms.setText(String.valueOf(NB_ROOMS));
@@ -139,17 +148,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void createButtons(){
         for (int i = 0; i < NB_ROOMS; i++){
-            Button button = new Button(this);
-            button.setText(String.valueOf(i + 1));
+            ImageButton button = new ImageButton(this);
+            button.setImageResource(R.drawable.diablo_skull);
+            button.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             button.setOnClickListener(openFightActivity(i + 1));
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-            params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED);
-            params.setMargins(16, 16, 16, 16);
+            params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
+            params.columnSpec = GridLayout.spec(i % grid.getColumnCount(), 1f);
+            params.rowSpec = GridLayout.spec(i / grid.getColumnCount(), 1f);
+            params.setMargins(0, 16, 0, 16);
+            params.setGravity(Gravity.CENTER);
             button.setLayoutParams(params);
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setShape(GradientDrawable.RECTANGLE);
+            drawable.setColor(Color.BLACK);
+            drawable.setCornerRadius(24f);
+            drawable.setStroke(4, Color.BLACK);
+            button.setBackground(drawable);
+
 
             grid.addView(button);
         }
@@ -180,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < NB_ROOMS; i++){
             grid.getChildAt(i).setEnabled(true);
-            ((Button)grid.getChildAt(i)).setText(String.valueOf(i + 1));
+            ((ImageButton)grid.getChildAt(i)).setImageResource(R.drawable.diablo_skull);
         }
     }
 }

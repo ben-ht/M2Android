@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -28,10 +29,23 @@ public class RoomActivity extends AppCompatActivity {
             return insets;
         });
 
+        initUI();
+    }
+
+    private void initUI(){
         Intent intent = getIntent();
         player = intent.getParcelableExtra(IntentKeys.PLAYER);
         opponent = intent.getParcelableExtra(IntentKeys.OPPONENT);
         room = intent.getIntExtra(IntentKeys.ROOM, -1);
+
+        TextView health = findViewById(R.id.health);
+        health.setText(String.valueOf(player.getHealth()));
+
+        TextView power = findViewById(R.id.power);
+        power.setText(String.valueOf(player.getPower()));
+
+        TextView opponentPower = findViewById(R.id.opponent_power);
+        opponentPower.setText(String.valueOf(opponent.getPower()));
 
         Button attackBtn = findViewById(R.id.attack);
         attackBtn.setOnClickListener(fight());

@@ -5,11 +5,21 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Random;
+
 public class Opponent implements Parcelable {
-    private int power;
+    private final int power;
+    private final MonsterType type;
+    private static final Random random = new Random();
 
     public Opponent(){
-        power = (int) Math.round(Math.random() * 150);
+        type = randomType();
+        power = (int) Math.round(Math.random() * 150) + 1;
+    }
+
+    private static MonsterType randomType(){
+        int index = random.nextInt(MonsterType.class.getEnumConstants().length);
+        return MonsterType.class.getEnumConstants()[index];
     }
 
     public int getPower(){
@@ -24,10 +34,12 @@ public class Opponent implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(power);
+        dest.writeInt(type.ordinal());
     }
 
     protected Opponent(Parcel source){
         power = source.readInt();
+        type = MonsterType.values()[source.readInt()];
     }
 
     public static final Creator<Opponent> CREATOR = new Creator<Opponent>() {
