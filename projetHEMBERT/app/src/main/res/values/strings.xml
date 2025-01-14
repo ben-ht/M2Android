@@ -26,4 +26,5 @@
     <string name="monster_vampire">Vampire</string>
     <string name="room_already_explored">Cette salle à déja été explorée</string>
     <string name="image_of_the_monster">Image of the monster</string>
+    <string name="_16">16</string>
 </resources>

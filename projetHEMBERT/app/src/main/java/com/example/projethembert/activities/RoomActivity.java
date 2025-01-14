@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -14,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.projethembert.entities.Room;
 import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.utils.IntentKeys;
 import com.example.projethembert.R;
@@ -25,14 +27,11 @@ import com.example.projethembert.entities.Player;
  * Page de combat
  */
 public class RoomActivity extends AppCompatActivity {
-    /// Monstre
-    private Monster monster;
-
     /// Joueur
     private Player player;
 
     /// Index de la salle
-    private int room;
+    private Room room;
 
     /**
      * Initialisation de l'activité
@@ -63,16 +62,16 @@ public class RoomActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean playerWins = player.fight(monster);
+                boolean playerWins = player.fight(room.getMonster());
 
                 Intent intent = new Intent();
                 intent.putExtra(IntentKeys.PLAYER, player);
                 if (playerWins){
                     intent.putExtra(IntentKeys.FIGHT_RESULT,
-                            new FightResult(room, FightResultEnum.WON));
+                            new FightResult(room.getId(), FightResultEnum.WON));
                 } else {
                     intent.putExtra(IntentKeys.FIGHT_RESULT,
-                            new FightResult(room, FightResultEnum.LOST));
+                            new FightResult(room.getId(), FightResultEnum.LOST));
                 }
                 setResult(RESULT_OK, intent);
                 finish();
@@ -88,7 +87,7 @@ public class RoomActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra(IntentKeys.PLAYER, player);
         intent.putExtra(IntentKeys.FIGHT_RESULT,
-                new FightResult(room, FightResultEnum.FLED));
+                new FightResult(room.getId(), FightResultEnum.FLED));
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -123,8 +122,7 @@ public class RoomActivity extends AppCompatActivity {
     private void initUI(){
         Intent intent = getIntent();
         player = intent.getParcelableExtra(IntentKeys.PLAYER);
-        monster = intent.getParcelableExtra(IntentKeys.OPPONENT);
-        room = intent.getIntExtra(IntentKeys.ROOM, -1);
+        room = intent.getParcelableExtra(IntentKeys.ROOM);
 
         TextView health = findViewById(R.id.health);
         health.setText(String.valueOf(player.getHealth()));
@@ -133,13 +131,13 @@ public class RoomActivity extends AppCompatActivity {
         power.setText(String.valueOf(player.getPower()));
 
         TextView opponentPower = findViewById(R.id.opponent_power);
-        opponentPower.setText(String.valueOf(monster.getPower()));
+        opponentPower.setText(String.valueOf(room.getMonster().getPower()));
 
         ImageView monsterImage = findViewById(R.id.monsterImage);
-        monsterImage.setImageResource(monster.getType().getAsset());
+        monsterImage.setImageResource(room.getMonster().getType().getAsset());
 
         TextView monsterType = findViewById(R.id.monsterType);
-        monsterType.setText(monster.getType().getName());
+        monsterType.setText(room.getMonster().getType().getName());
 
         Button attackBtn = findViewById(R.id.attack);
         attackBtn.setOnClickListener(fight());
@@ -148,5 +146,9 @@ public class RoomActivity extends AppCompatActivity {
         fleeBtn.setOnClickListener(fleeOnClick());
 
         getOnBackPressedDispatcher().addCallback(this, fleeOnBackButton());
+
+        if (room.getBonus() != null){
+            Toast.makeText(RoomActivity.this, "Bonus !!!!", Toast.LENGTH_LONG).show();
+        }
     }
 }

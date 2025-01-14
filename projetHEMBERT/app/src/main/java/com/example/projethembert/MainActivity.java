@@ -27,13 +27,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.projethembert.activities.RoomActivity;
+import com.example.projethembert.entities.bonuses.BonusFactory;
 import com.example.projethembert.entities.FightResult;
-import com.example.projethembert.entities.Monster;
 import com.example.projethembert.entities.Player;
+import com.example.projethembert.entities.Room;
 import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.utils.IntentKeys;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
 
 /**
  * Classe de la page d'accueil du jeu
@@ -42,20 +45,33 @@ public class MainActivity extends AppCompatActivity {
     /// Nombre de salles
     private static final int NB_ROOMS = 16;
 
-    /// Liste des monstres
-    private final ArrayList<Monster> monsters = new ArrayList<>(NB_ROOMS);
+    /// Nombre de bonus
+    private static final int NB_BONUSES = 2;
+
+    ///RNG
+    private static final Random random = new Random();
+
+    /// Liste des salles
+    private final ArrayList<Room> rooms = new ArrayList<>(NB_ROOMS);
+
     /// Message de résultat de combat
     private TextView fightResultLabel;
+
     /// Grille de ImageButton
     private GridLayout grid;
     /// Indicateur de points de vie
+    ///
     private TextView health;
+
     /// Joueur
     private Player player;
+
     /// Indicateur de puissance
     private TextView power;
+
     /// Indicateur de salles non explorées
     private TextView unexploredRooms;
+
     /// Callback après le déroulement d'un combat
     private final ActivityResultLauncher<Intent> dungeonLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -176,11 +192,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void handleFightResult(FightResult fightResult) {
         GridLayout grid = findViewById(R.id.buttonsGrid);
-        ImageButton clearedRoomBtn = (ImageButton) grid.getChildAt(fightResult.getRoom() - 1);
+        ImageButton clearedRoomBtn = (ImageButton) grid.getChildAt(fightResult.getRoomId() - 1);
         if (fightResult.getResult() == FightResultEnum.WON) {
             String unexploredRoomsCount = String.valueOf(Integer.parseInt(unexploredRooms.getText().toString()) - 1);
             unexploredRooms.setText(unexploredRoomsCount);
-            monsters.set(fightResult.getRoom() - 1, null);
+            rooms.set(fightResult.getRoomId() - 1, null);
             clearedRoomBtn.setImageResource(R.drawable.door_cross_mark);
             power.setText(String.valueOf(player.getPower()));
         } else {
@@ -193,12 +209,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialise la page avec les données du joueur et des monstres
+     * Initialise la page avec le joueur et les salles
      */
     private void init() {
         player = new Player();
+
+        HashSet<Integer> bonusesIndexes = new HashSet<>();
+        for (int i = 0; i < NB_BONUSES; i++){
+            int room = random.nextInt(NB_ROOMS);
+            bonusesIndexes.add(room);
+        }
+
         for (int i = 0; i < NB_ROOMS; i++) {
-            monsters.add(i, new Monster());
+            rooms.add(i, new Room(i + 1));
+            if (bonusesIndexes.contains(i)){
+                rooms.get(i).setBonus(BonusFactory.createBonus());
+            }
         }
 
         unexploredRooms.setText(String.valueOf(NB_ROOMS));
@@ -215,15 +241,14 @@ public class MainActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (monsters.get(index - 1) == null) {
+                if (rooms.get(index - 1) == null) {
                     Toast.makeText(MainActivity.this,
                             getString(R.string.room_already_explored),
                             Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(MainActivity.this, RoomActivity.class);
-                    intent.putExtra(IntentKeys.ROOM, index);
                     intent.putExtra(IntentKeys.PLAYER, player);
-                    intent.putExtra(IntentKeys.OPPONENT, monsters.get(index - 1));
+                    intent.putExtra(IntentKeys.ROOM, rooms.get(index - 1));
                     dungeonLauncher.launch(intent);
                 }
             }

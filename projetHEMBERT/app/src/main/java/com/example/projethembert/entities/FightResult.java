@@ -28,15 +28,15 @@ public class FightResult implements Parcelable {
     private final FightResultEnum result;
 
     /// Index de la salle dans laquelle s'est déroulé le combat
-    private final int room;
+    private final int roomId;
 
-    public FightResult(int room, FightResultEnum result) {
+    public FightResult(int roomId, FightResultEnum result) {
         this.result = result;
-        this.room = room;
+        this.roomId = roomId;
     }
 
     protected FightResult(Parcel source){
-        room = source.readInt();
+        roomId = source.readInt();
         result = FightResultEnum.values()[source.readInt()];
     }
 
@@ -47,7 +47,7 @@ public class FightResult implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeInt(room);
+        dest.writeInt(roomId);
         dest.writeInt(result.ordinal());
     }
 
@@ -55,7 +55,7 @@ public class FightResult implements Parcelable {
         return result;
     }
 
-    public int getRoom() {
-        return room;
+    public int getRoomId() {
+        return roomId;
     }
 }
