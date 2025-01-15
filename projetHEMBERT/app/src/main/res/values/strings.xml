@@ -37,4 +37,7 @@
     <string name="level">"Niveau: %d"</string>
     <string name="niveau_1">Niveau: 1</string>
     <string name="next_round">Next round</string>
+    <string name="replay">Rejouer</string>
+    <string name="quit">Quitter</string>
+    <string name="settings">Paramètres</string>
 </resources>

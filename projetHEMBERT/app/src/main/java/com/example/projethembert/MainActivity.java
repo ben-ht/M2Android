@@ -20,18 +20,21 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.projethembert.activities.ConfigurationActivity;
 import com.example.projethembert.activities.RoomActivity;
 import com.example.projethembert.entities.bonuses.BonusFactory;
 import com.example.projethembert.entities.FightResult;
 import com.example.projethembert.entities.Player;
 import com.example.projethembert.entities.Room;
 import com.example.projethembert.entities.enums.FightResultEnum;
+import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
 
 import java.util.ArrayList;
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     /// Bouton de passage à la manche suivante
     private ImageButton nextRound;
 
+    /// Configuration de la partie
+    private Config config;
+
     /// Callback après le déroulement d'un combat
     private final ActivityResultLauncher<Intent> dungeonLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -90,6 +96,20 @@ public class MainActivity extends AppCompatActivity {
                         player = intent.getParcelableExtra(IntentKeys.PLAYER);
                         FightResult fightResult = intent.getParcelableExtra(IntentKeys.FIGHT_RESULT);
                         handleFightResult(fightResult);
+                    }
+                }
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> configLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK){
+                        Intent intent = result.getData();
+                        config = intent.getParcelableExtra(IntentKeys.CONFIG);
+
                     }
                 }
             }
@@ -114,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.settings){
+            openConfigActivity();
+            return true;
+        }
         if (item.getItemId() == R.id.reset) {
             reset();
             return true;
@@ -247,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param index Indice de la salle (de 1 à NB_ROOM)
      */
-    private View.OnClickListener openFightActivity(int index) {
+    private View.OnClickListener openFightActivity(int index) { //TODO Remplacer lambda
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -307,5 +331,10 @@ public class MainActivity extends AppCompatActivity {
         nextRound.setVisibility(View.GONE);
         player.levelUp();
         reset();
+    }
+
+    private void openConfigActivity(){
+        Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
+        configLauncher.launch(intent);
     }
 }

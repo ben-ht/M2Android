@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ProjetHEMBERT"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ConfigurationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RoomActivity"
             android:exported="false" />
         <activity
