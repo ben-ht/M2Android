@@ -4,13 +4,18 @@ import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import com.example.projethembert.R;
 import com.example.projethembert.entities.Player;
 
-public class MagicPotion implements Bonus{
-    private String name;
+import java.util.Random;
 
-    private String description;
-    private int power;
+public class MagicPotion implements Bonus{
+    private static final Random RANDOM = new Random();
+    private static final int MIN_HEALTH = 1;
+    private static final int MAX_HEALTH = 3;
+    private int name = R.string.magic_potion;
+    private int description = R.string.magic_potion_desc;
+    private final int health;
 
     @Override
     public int describeContents() {
@@ -21,19 +26,19 @@ public class MagicPotion implements Bonus{
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeInt(power);
+        dest.writeInt(name);
+        dest.writeInt(description);
+        dest.writeInt(health);
     }
 
     public MagicPotion(){
-
+        health = RANDOM.nextInt(MAX_HEALTH - MIN_HEALTH + 1) + MIN_HEALTH;
     }
 
     protected MagicPotion(Parcel in) {
-        name = in.readString();
-        description = in.readString();
-        power = in.readInt();
+        name = in.readInt();
+        description = in.readInt();
+        health = in.readInt();
     }
 
     public static final Creator<MagicPotion> CREATOR = new Creator<MagicPotion>() {
@@ -50,16 +55,21 @@ public class MagicPotion implements Bonus{
 
     @Override
     public void use(Player player) {
-
+        player.setHealth(player.getHealth() + health);
     }
 
     @Override
-    public String getName() {
+    public int getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public int getDescription() {
         return description;
+    }
+
+    @Override
+    public int getImage() {
+        return (R.drawable.bonus_health_potion);
     }
 }

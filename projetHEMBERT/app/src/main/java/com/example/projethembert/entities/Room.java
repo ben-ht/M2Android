@@ -19,8 +19,8 @@ public class Room implements Parcelable {
 
     private Bonus bonus;
 
-    public Room(int id){
-        monster = new Monster();
+    public Room(int id, int level){
+        monster = new Monster(level);
         this.id = id;
     }
 

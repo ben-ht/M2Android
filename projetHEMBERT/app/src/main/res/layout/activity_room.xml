@@ -11,12 +11,24 @@
         android:id="@+id/player_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
         android:text="@string/player"
+        android:layout_marginTop="48dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bonusImage"
+        android:layout_width="125dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/bonus_image"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/player_label"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bonus_health_potion" />
 
     <TextView
         android:id="@+id/power_label"
@@ -115,4 +127,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/attack"
         app:layout_constraintTop_toBottomOf="@+id/opponent_power" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

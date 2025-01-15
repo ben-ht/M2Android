@@ -1,5 +1,6 @@
 package com.example.projethembert.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +21,6 @@ import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.utils.IntentKeys;
 import com.example.projethembert.R;
 import com.example.projethembert.entities.FightResult;
-import com.example.projethembert.entities.Monster;
 import com.example.projethembert.entities.Player;
 
 /**
@@ -30,8 +30,17 @@ public class RoomActivity extends AppCompatActivity {
     /// Joueur
     private Player player;
 
-    /// Index de la salle
+    /// Salle
     private Room room;
+
+    /// Affichage de la santé du joueur
+    private TextView health;
+
+    /// Affichage de la puissance du joueur
+    private TextView power;
+
+    /// Affichage du bonus
+    private ImageView bonusImage;
 
     /**
      * Initialisation de l'activité
@@ -124,11 +133,10 @@ public class RoomActivity extends AppCompatActivity {
         player = intent.getParcelableExtra(IntentKeys.PLAYER);
         room = intent.getParcelableExtra(IntentKeys.ROOM);
 
-        TextView health = findViewById(R.id.health);
-        health.setText(String.valueOf(player.getHealth()));
+        health = findViewById(R.id.health);
+        power = findViewById(R.id.power);
 
-        TextView power = findViewById(R.id.power);
-        power.setText(String.valueOf(player.getPower()));
+        updatePlayerInfo();
 
         TextView opponentPower = findViewById(R.id.opponent_power);
         opponentPower.setText(String.valueOf(room.getMonster().getPower()));
@@ -148,7 +156,35 @@ public class RoomActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, fleeOnBackButton());
 
         if (room.getBonus() != null){
-            Toast.makeText(RoomActivity.this, "Bonus !!!!", Toast.LENGTH_LONG).show();
+            bonusImage = findViewById(R.id.bonusImage);
+            bonusImage.setImageResource(room.getBonus().getImage());
+            bonusImage.setVisibility(View.VISIBLE);
+            bonusImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showBonusDialog();
+                }
+            });
         }
+    }
+
+    private void showBonusDialog(){
+         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+         dialogBuilder.setTitle(room.getBonus().getName());
+         dialogBuilder.setMessage(room.getBonus().getDescription());
+         dialogBuilder.setPositiveButton(R.string.use, (dialog, which) -> {
+            room.getBonus().use(player);
+            bonusImage.setVisibility(View.GONE);
+            updatePlayerInfo();
+
+            dialog.dismiss();
+         });
+         dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+         dialogBuilder.create().show();
+    }
+
+    private void updatePlayerInfo(){
+        health.setText(String.valueOf(player.getHealth()));
+        power.setText(String.valueOf(player.getPower()));
     }
 }

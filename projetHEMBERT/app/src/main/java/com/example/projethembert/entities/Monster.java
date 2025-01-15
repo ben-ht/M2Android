@@ -34,12 +34,15 @@ public class Monster implements Parcelable {
     /// Type du monstre
     private final MonsterType type;
 
-    public Monster(){
+    private int level;
+
+    public Monster(int level){
         type = randomType();
-        power = (int) Math.round(Math.random() * 150) + 1;
+        power = (int) (Math.round(Math.random() * 150) + 1) * level;
     }
 
     protected Monster(Parcel source){
+        level = source.readInt();
         power = source.readInt();
         type = MonsterType.values()[source.readInt()];
     }
@@ -60,6 +63,7 @@ public class Monster implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(level);
         dest.writeInt(power);
         dest.writeInt(type.ordinal());
     }

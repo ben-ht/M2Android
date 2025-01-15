@@ -36,13 +36,17 @@ public class Player implements Parcelable {
     /// Puissance
     private int power;
 
+    private int level;
+
     public Player(){
+        level = 1;
         power = DEFAUlT_POWER;
         health = DEFAULT_HEALTH;
     }
 
     /// Constructeur du parcelable
     protected Player(Parcel source){
+        level = source.readInt();
         power = source.readInt();
         health = source.readInt();
     }
@@ -54,6 +58,7 @@ public class Player implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(level);
         dest.writeInt(power);
         dest.writeInt(health);
     }
@@ -74,6 +79,15 @@ public class Player implements Parcelable {
         return playerWins;
     }
 
+    public void levelUp(){
+        level++;
+    }
+
+    public void setDefaultStats(){
+        this.health = DEFAULT_HEALTH;
+        this.power = DEFAUlT_POWER * level;
+    }
+
     /**
      * Retire 1 point de vie quand le joueur fuit
      */
@@ -87,5 +101,17 @@ public class Player implements Parcelable {
 
     public int getPower() {
         return power;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
     }
 }

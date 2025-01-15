@@ -72,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
     /// Indicateur de salles non explorées
     private TextView unexploredRooms;
 
+    /// Indicateur de niveau
+    private TextView level;
+
+    /// Bouton de passage à la manche suivante
+    private ImageButton nextRound;
+
     /// Callback après le déroulement d'un combat
     private final ActivityResultLauncher<Intent> dungeonLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -136,14 +142,20 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        player = new Player();
+
         fightResultLabel = findViewById(R.id.fight_result_content);
         unexploredRooms = findViewById(R.id.unexploredRooms);
         health = findViewById(R.id.health);
         power = findViewById(R.id.power);
         grid = findViewById(R.id.buttonsGrid);
+        level = findViewById(R.id.level);
+        nextRound = findViewById(R.id.nextRound);
+        nextRound.setOnClickListener(v -> nextRound());
 
         init();
         createButtons();
+        updatePlayerStats();
     }
 
     /**
@@ -198,22 +210,22 @@ public class MainActivity extends AppCompatActivity {
             unexploredRooms.setText(unexploredRoomsCount);
             rooms.set(fightResult.getRoomId() - 1, null);
             clearedRoomBtn.setImageResource(R.drawable.door_cross_mark);
-            power.setText(String.valueOf(player.getPower()));
         } else {
             clearedRoomBtn.setImageResource(R.drawable.door_dungeon);
-            health.setText(String.valueOf(player.getHealth()));
         }
 
+        updatePlayerStats();
         fightResultLabel.setText(fightResult.getResult().getMessage());
         tryEndGame();
     }
 
     /**
-     * Initialise la page avec le joueur et les salles
+     * Initialise la page avec les données du joueur et les salles
      */
     private void init() {
-        player = new Player();
-
+        updatePlayerStats();
+        BonusFactory.resetBonuses();
+        player.setDefaultStats();
         HashSet<Integer> bonusesIndexes = new HashSet<>();
         for (int i = 0; i < NB_BONUSES; i++){
             int room = random.nextInt(NB_ROOMS);
@@ -221,15 +233,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < NB_ROOMS; i++) {
-            rooms.add(i, new Room(i + 1));
+            rooms.add(i, new Room(i + 1, player.getLevel()));
             if (bonusesIndexes.contains(i)){
                 rooms.get(i).setBonus(BonusFactory.createBonus());
             }
         }
 
         unexploredRooms.setText(String.valueOf(NB_ROOMS));
-        health.setText(String.valueOf(player.getHealth()));
-        power.setText(String.valueOf(player.getPower()));
     }
 
     /**
@@ -259,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
      * Réinitialise le jeu à l'état de démarrage de l'application
      */
     private void reset() {
+        player.setDefaultStats();
         init();
 
         fightResultLabel.setText(R.string.waiting_);
@@ -276,11 +287,25 @@ public class MainActivity extends AppCompatActivity {
         if (unexploredRooms.getText().equals("0")) {
             fightResultLabel.setText(R.string.victory);
             disableButtonClick();
+            nextRound.setVisibility(View.VISIBLE);
         }
 
         if (player.getHealth() <= 0) {
             fightResultLabel.setText(R.string.defeat);
             disableButtonClick();
+            player = new Player();
         }
+    }
+
+    private void updatePlayerStats(){
+        health.setText(String.valueOf(player.getHealth()));
+        power.setText(String.valueOf(player.getPower()));
+        level.setText(getString(R.string.level, player.getLevel()));
+    }
+
+    private void nextRound(){
+        nextRound.setVisibility(View.GONE);
+        player.levelUp();
+        reset();
     }
 }

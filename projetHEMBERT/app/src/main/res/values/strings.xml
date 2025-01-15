@@ -27,4 +27,14 @@
     <string name="room_already_explored">Cette salle à déja été explorée</string>
     <string name="image_of_the_monster">Image of the monster</string>
     <string name="_16">16</string>
+    <string name="bonus_image">Image of the bonus</string>
+    <string name="power_charm">Charme de puissance</string>
+    <string name="power_charm_desc">Gagne 5 à 10 points de puissance supplémentaire</string>
+    <string name="magic_potion">Potion magique</string>
+    <string name="magic_potion_desc">Restaure 1 à 3 points de vie</string>
+    <string name="use">Utiliser</string>
+    <string name="cancel">Annuler</string>
+    <string name="level">"Niveau: %d"</string>
+    <string name="niveau_1">Niveau: 1</string>
+    <string name="next_round">Next round</string>
 </resources>
