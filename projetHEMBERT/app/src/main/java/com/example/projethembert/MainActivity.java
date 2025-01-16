@@ -20,7 +20,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -33,6 +32,7 @@ import com.example.projethembert.entities.bonuses.BonusFactory;
 import com.example.projethembert.entities.FightResult;
 import com.example.projethembert.entities.Player;
 import com.example.projethembert.entities.Room;
+import com.example.projethembert.entities.enums.Difficulty;
 import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
@@ -106,10 +106,11 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
+                    // TODO erreurs
                     if (result.getResultCode() == RESULT_OK){
                         Intent intent = result.getData();
                         config = intent.getParcelableExtra(IntentKeys.CONFIG);
-
+                        reset(true);
                     }
                 }
             }
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.reset) {
-            reset();
+            reset(true);
             return true;
         }
         if (item.getItemId() == R.id.quit) {
@@ -165,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        player = new Player();
+        config = new Config(Difficulty.MEDIUM);
+        player = new Player(config);
 
         fightResultLabel = findViewById(R.id.fight_result_content);
         unexploredRooms = findViewById(R.id.unexploredRooms);
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < NB_ROOMS; i++) {
-            rooms.add(i, new Room(i + 1, player.getLevel()));
+            rooms.add(i, new Room(i + 1, player.getLevel(), config));
             if (bonusesIndexes.contains(i)){
                 rooms.get(i).setBonus(BonusFactory.createBonus());
             }
@@ -292,8 +293,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Réinitialise le jeu à l'état de démarrage de l'application
      */
-    private void reset() {
-        player.setDefaultStats();
+    private void reset(boolean newGame) {
+        if (newGame){
+            player = new Player(config);
+        } else {
+            player.setDefaultStats();
+        }
+
         init();
 
         fightResultLabel.setText(R.string.waiting_);
@@ -317,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
         if (player.getHealth() <= 0) {
             fightResultLabel.setText(R.string.defeat);
             disableButtonClick();
-            player = new Player();
         }
     }
 
@@ -330,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
     private void nextRound(){
         nextRound.setVisibility(View.GONE);
         player.levelUp();
-        reset();
+        reset(false);
     }
 
     private void openConfigActivity(){

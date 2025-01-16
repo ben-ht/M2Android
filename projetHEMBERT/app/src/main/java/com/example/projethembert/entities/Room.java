@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.example.projethembert.entities.bonuses.Bonus;
+import com.example.projethembert.utils.Config;
 
 /**
  * Représente une salle
@@ -18,9 +19,11 @@ public class Room implements Parcelable {
     private final int id;
 
     private Bonus bonus;
+    private final Config config;
 
-    public Room(int id, int level){
-        monster = new Monster(level);
+    public Room(int id, int level, Config config){
+        this.config = config;
+        monster = new Monster(level, config);
         this.id = id;
     }
 
@@ -28,6 +31,7 @@ public class Room implements Parcelable {
         id = in.readInt();
         monster = in.readParcelable(Monster.class.getClassLoader());
         bonus = in.readParcelable(Bonus.class.getClassLoader());
+        config = in.readParcelable(Config.class.getClassLoader());
     }
 
     @Override
@@ -40,6 +44,7 @@ public class Room implements Parcelable {
         dest.writeInt(id);
         dest.writeParcelable(monster, flags);
         dest.writeParcelable(bonus, flags);
+        dest.writeParcelable(config, flags);
     }
 
     public static final Creator<Room> CREATOR = new Creator<Room>() {

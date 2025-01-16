@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.example.projethembert.entities.enums.MonsterType;
+import com.example.projethembert.utils.Config;
 
 import java.util.Random;
 
@@ -35,16 +36,19 @@ public class Monster implements Parcelable {
     private final MonsterType type;
 
     private int level;
+    private final Config config;
 
-    public Monster(int level){
+    public Monster(int level, Config config){
+        this.config = config;
         type = randomType();
-        power = (int) (Math.round(Math.random() * 150) + 1) * level;
+        power = (int) (Math.round(Math.random() * config.getDifficulty().getMaxMonsterPower()) + 1) * level;
     }
 
     protected Monster(Parcel source){
         level = source.readInt();
         power = source.readInt();
         type = MonsterType.values()[source.readInt()];
+        config = source.readParcelable(Config.class.getClassLoader());
     }
 
     /**
@@ -66,6 +70,7 @@ public class Monster implements Parcelable {
         dest.writeInt(level);
         dest.writeInt(power);
         dest.writeInt(type.ordinal());
+        dest.writeParcelable(config, flags);
     }
 
     public int getPower(){

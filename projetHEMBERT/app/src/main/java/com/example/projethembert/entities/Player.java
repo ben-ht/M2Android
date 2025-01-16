@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.projethembert.utils.Config;
+
+
 /**
  * Représente le joueur
  */
@@ -24,12 +27,6 @@ public class Player implements Parcelable {
         }
     };
 
-    /// Points de vie par défaut
-    private final static int DEFAULT_HEALTH = 10;
-
-    /// Puissance par défaut
-    private final static int DEFAUlT_POWER = 100;
-
     /// Points de vie
     private int health;
 
@@ -37,11 +34,13 @@ public class Player implements Parcelable {
     private int power;
 
     private int level;
+    private final Config config;
 
-    public Player(){
+    public Player(Config config){
+        this.config = config;
         level = 1;
-        power = DEFAUlT_POWER;
-        health = DEFAULT_HEALTH;
+        power = config.getDifficulty().getPlayerPower();
+        health = config.getDifficulty().getPlayerHealth();
     }
 
     /// Constructeur du parcelable
@@ -49,6 +48,7 @@ public class Player implements Parcelable {
         level = source.readInt();
         power = source.readInt();
         health = source.readInt();
+        config = source.readParcelable(Config.class.getClassLoader());
     }
 
     @Override
@@ -61,6 +61,7 @@ public class Player implements Parcelable {
         dest.writeInt(level);
         dest.writeInt(power);
         dest.writeInt(health);
+        dest.writeParcelable(config, flags);
     }
 
     /**
@@ -84,8 +85,8 @@ public class Player implements Parcelable {
     }
 
     public void setDefaultStats(){
-        this.health = DEFAULT_HEALTH;
-        this.power = DEFAUlT_POWER * level;
+        this.health = config.getDifficulty().getPlayerHealth() * level;
+        this.power = config.getDifficulty().getPlayerPower() * level;
     }
 
     /**

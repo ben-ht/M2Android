@@ -121,5 +121,11 @@
                     android:inputType="number" />
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/startGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Démarrer la partie" />
     </LinearLayout>
 </ScrollView>

@@ -3,6 +3,7 @@ package com.example.projethembert.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -132,14 +133,15 @@ public class RoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         player = intent.getParcelableExtra(IntentKeys.PLAYER);
         room = intent.getParcelableExtra(IntentKeys.ROOM);
-
+        assert room != null;
         health = findViewById(R.id.health);
         power = findViewById(R.id.power);
 
         updatePlayerInfo();
 
-        TextView opponentPower = findViewById(R.id.opponent_power);
-        opponentPower.setText(String.valueOf(room.getMonster().getPower()));
+        // TODO replace opponent
+        TextView monsterPower = findViewById(R.id.opponent_power);
+        monsterPower.setText(String.valueOf(room.getMonster().getPower()));
 
         ImageView monsterImage = findViewById(R.id.monsterImage);
         monsterImage.setImageResource(room.getMonster().getType().getAsset());
