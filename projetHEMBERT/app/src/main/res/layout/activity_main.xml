@@ -23,21 +23,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textSize="20sp"
         android:text="@string/niveau_1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/difficulty"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/difficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/medium"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/level"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/level"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <GridLayout
         android:id="@+id/buttonsGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:rowCount="4"
-        android:layout_marginTop="8dp"
         android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:columnCount="4"
         android:padding="0dp"
+        android:rowCount="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/level" />
@@ -98,9 +111,9 @@
         android:id="@+id/fight_result_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="@string/fight_result"
         android:textSize="18sp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
@@ -109,8 +122,8 @@
         android:id="@+id/fight_result_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/waiting"
         android:layout_marginTop="16dp"
+        android:text="@string/waiting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fight_result_title" />

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +34,8 @@ public class ConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
 
-        config = new Config(Difficulty.MEDIUM);
+        Intent intent = getIntent();
+        config = intent.getParcelableExtra(IntentKeys.CONFIG);
 
         difficultyGroup = findViewById(R.id.difficulty_group);
         customButton = findViewById(R.id.radio_custom);
@@ -51,6 +53,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 if (checkedId == R.id.radio_easy) setDefaultValues(Difficulty.EASY);
                 else if (checkedId == R.id.radio_medium) setDefaultValues(Difficulty.MEDIUM);
                 else if (checkedId == R.id.radio_hard) setDefaultValues(Difficulty.HARD);
+                else setDefaultValues(Difficulty.CUSTOM);
             }
         });
 
@@ -58,17 +61,31 @@ public class ConfigurationActivity extends AppCompatActivity {
         addTextWatcher(playerPower);
         addTextWatcher(monsterPower);
 
-        RadioButton medium = findViewById(R.id.radio_medium);
-        medium.setChecked(true);
+        setDefaultValues(config.getDifficulty());
+        switch (config.getDifficulty()) {
+            case EASY:
+                ((RadioButton)findViewById(R.id.radio_easy)).setChecked(true);
+                break;
+            case MEDIUM:
+                ((RadioButton)findViewById(R.id.radio_medium)).setChecked(true);
+                break;
+            case HARD:
+                ((RadioButton)findViewById(R.id.radio_hard)).setChecked(true);
+                break;
+            default:
+                customButton.setChecked(true);
+        }
     }
 
     private void setDefaultValues(Difficulty difficulty) {
         config.setDifficulty(difficulty);
-        isUserEditing = true;
+        if (difficulty != Difficulty.CUSTOM) {
+            isUserEditing = true;
             playerHp.setText(String.valueOf(difficulty.getPlayerHealth()));
             playerPower.setText(String.valueOf(difficulty.getPlayerPower()));
             monsterPower.setText(String.valueOf(difficulty.getMaxMonsterPower()));
-        isUserEditing = false;
+            isUserEditing = false;
+        }
     }
 
     private void addTextWatcher(EditText editText) {

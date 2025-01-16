@@ -37,6 +37,8 @@ import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK){
                         Intent intent = result.getData();
                         config = intent.getParcelableExtra(IntentKeys.CONFIG);
+                        TextView difficulty = findViewById(R.id.difficulty);
+                        difficulty.setText(config.getDifficulty().getName());
                         reset(true);
                     }
                 }
@@ -340,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openConfigActivity(){
         Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
+        intent.putExtra(IntentKeys.CONFIG, config);
         configLauncher.launch(intent);
     }
 }

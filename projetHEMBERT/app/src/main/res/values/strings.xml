@@ -40,4 +40,8 @@
     <string name="replay">Rejouer</string>
     <string name="quit">Quitter</string>
     <string name="settings">Paramètres</string>
+    <string name="easy">Facile</string>
+    <string name="medium">Moyen</string>
+    <string name="hard">Difficile</string>
+    <string name="custom">Personnalisé</string>
 </resources>

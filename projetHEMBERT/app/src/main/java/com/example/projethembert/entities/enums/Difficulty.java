@@ -1,17 +1,23 @@
 package com.example.projethembert.entities.enums;
 
-public enum Difficulty {
-    EASY(20, 100, 150),
-    MEDIUM(10, 100, 150),
-    HARD(10, 75, 150),
-    CUSTOM();
+import com.example.projethembert.R;
 
+public enum Difficulty {
+    EASY(R.string.easy, 20, 100, 150),
+    MEDIUM(R.string.medium, 10, 100, 150),
+    HARD(R.string.hard, 10, 75, 150),
+    CUSTOM(R.string.custom);
+
+    private final int name;
     private int playerHealth;
     private int playerPower;
     private int maxMonsterPower;
 
-    Difficulty(){}
-    Difficulty(int playerHealth, int playerPower, int maxMonsterPower){
+    Difficulty(int name){
+        this.name = name;
+    }
+    Difficulty(int name, int playerHealth, int playerPower, int maxMonsterPower){
+        this.name = name;
         this.playerHealth = playerHealth;
         this.playerPower = playerPower;
         this.maxMonsterPower = maxMonsterPower;
@@ -27,6 +33,10 @@ public enum Difficulty {
 
     public int getMaxMonsterPower() {
         return maxMonsterPower;
+    }
+
+    public int getName() {
+        return name;
     }
 
     public void setMaxMonsterPower(int maxMonsterPower) {
