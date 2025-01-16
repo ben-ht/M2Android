@@ -9,6 +9,7 @@ import com.example.projethembert.entities.enums.Difficulty;
 
 public class Config implements Parcelable {
     private Difficulty difficulty;
+    private String playerName;
 
     public Config(Difficulty difficulty){
         this.difficulty = difficulty;
@@ -16,6 +17,10 @@ public class Config implements Parcelable {
 
     public Difficulty getDifficulty() {
         return difficulty;
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 
     public void setDifficulty(Difficulty difficulty){

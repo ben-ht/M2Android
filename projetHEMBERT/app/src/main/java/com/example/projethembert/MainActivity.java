@@ -3,6 +3,7 @@ package com.example.projethembert;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,19 +28,24 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.projethembert.activities.ConfigurationActivity;
+import com.example.projethembert.activities.LeaderBoardActivity;
 import com.example.projethembert.activities.RoomActivity;
+import com.example.projethembert.entities.LeaderboardEntry;
 import com.example.projethembert.entities.bonuses.BonusFactory;
 import com.example.projethembert.entities.FightResult;
 import com.example.projethembert.entities.Player;
 import com.example.projethembert.entities.Room;
 import com.example.projethembert.entities.enums.Difficulty;
 import com.example.projethembert.entities.enums.FightResultEnum;
+import com.example.projethembert.repository.Database;
+import com.example.projethembert.repository.utils.DateConverter;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -141,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings){
             openConfigActivity();
+            return true;
+        }
+        if (item.getItemId() == R.id.leaderboard){
+            openLeaderboardActivity();
             return true;
         }
         if (item.getItemId() == R.id.reset) {
@@ -346,5 +356,26 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
         intent.putExtra(IntentKeys.CONFIG, config);
         configLauncher.launch(intent);
+    }
+
+    private void openLeaderboardActivity(){
+        Intent intent = new Intent(MainActivity.this, LeaderBoardActivity.class);
+        startActivity(intent);
+    }
+
+    private void saveScore(){
+        LeaderboardEntry entry = new LeaderboardEntry(
+            config.getPlayerName(),
+                player.getLevel(),
+                player.getPower(),
+                new Date(),
+                getString(config.getDifficulty().getName())
+        );
+
+        AsyncTask.execute(() -> {
+            Database db = Database.getInstance(getApplicationContext());
+            db.leaderboardRepository().insertIfTop10(entry);
+        });
+
     }
 }

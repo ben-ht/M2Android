@@ -6,6 +6,10 @@
         android:title="@string/settings"
         app:showAsAction="never" />
 
+    <item android:id="@+id/leaderboard"
+        android:title="@string/scores"
+        app:showAsAction="never" />
+
     <item android:id="@+id/reset"
         android:title="@string/replay"
         app:showAsAction="never" />

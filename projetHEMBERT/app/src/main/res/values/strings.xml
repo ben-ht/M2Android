@@ -44,4 +44,5 @@
     <string name="medium">Moyen</string>
     <string name="hard">Difficile</string>
     <string name="custom">Personnalisé</string>
+    <string name="scores">Scores</string>
 </resources>
