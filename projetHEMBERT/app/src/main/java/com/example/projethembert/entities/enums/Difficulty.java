@@ -2,15 +2,25 @@ package com.example.projethembert.entities.enums;
 
 import com.example.projethembert.R;
 
+/**
+ * Représente les différents niveaux de difficulté possible
+ */
 public enum Difficulty {
     EASY(R.string.easy, 20, 100, 150),
     MEDIUM(R.string.medium, 10, 100, 150),
     HARD(R.string.hard, 10, 75, 150),
     CUSTOM(R.string.custom);
 
+    /// Nom de la difficulé affiché sur l'UI
     private final int name;
+
+    /// Santé initiale du joueur
     private int playerHealth;
+
+    /// Puissance initiale du joueur
     private int playerPower;
+
+    /// Puissance maximale du monstre
     private int maxMonsterPower;
 
     Difficulty(int name){

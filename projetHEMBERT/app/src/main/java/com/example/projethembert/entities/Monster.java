@@ -14,7 +14,6 @@ import java.util.Random;
  * Représente un monstre
  */
 public class Monster implements Parcelable {
-    /// Constructeur du Parcelable
     public static final Creator<Monster> CREATOR = new Creator<Monster>() {
         @Override
         public Monster createFromParcel(Parcel source) {
@@ -26,8 +25,12 @@ public class Monster implements Parcelable {
             return new Monster[size];
         }
     };
-    /// RNG
+
     private static final Random random = new Random();
+
+    /// Configuration de la partie, nécessaire en tant qu'attribut pour le fonctionnement du
+    /// parcelable
+    private final Config config;
 
     /// Puissance du monstre
     private final int power;
@@ -35,16 +38,16 @@ public class Monster implements Parcelable {
     /// Type du monstre
     private final MonsterType type;
 
+    /// Niveau du monstre
     private int level;
-    private final Config config;
 
-    public Monster(int level, Config config){
+    public Monster(int level, Config config) {
         this.config = config;
         type = randomType();
         power = (int) (Math.round(Math.random() * config.getDifficulty().getMaxMonsterPower()) + 1) * level;
     }
 
-    protected Monster(Parcel source){
+    protected Monster(Parcel source) {
         level = source.readInt();
         power = source.readInt();
         type = MonsterType.values()[source.readInt()];
@@ -55,7 +58,7 @@ public class Monster implements Parcelable {
      * Retourne un type de monstre aléatoire
      * @return Type de monstre
      */
-    private static MonsterType randomType(){
+    private static MonsterType randomType() {
         int index = random.nextInt(MonsterType.class.getEnumConstants().length);
         return MonsterType.class.getEnumConstants()[index];
     }
@@ -73,7 +76,7 @@ public class Monster implements Parcelable {
         dest.writeParcelable(config, flags);
     }
 
-    public int getPower(){
+    public int getPower() {
         return power;
     }
 

@@ -45,4 +45,6 @@
     <string name="hard">Difficile</string>
     <string name="custom">Personnalisé</string>
     <string name="scores">Scores</string>
+    <string name="yes">OUI\n</string>
+    <string name="back">Retour</string>
 </resources>

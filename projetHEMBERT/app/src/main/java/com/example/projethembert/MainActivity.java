@@ -3,7 +3,6 @@ package com.example.projethembert;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -28,109 +27,101 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.projethembert.activities.ConfigurationActivity;
-import com.example.projethembert.activities.LeaderBoardActivity;
+import com.example.projethembert.activities.LeaderboardActivity;
 import com.example.projethembert.activities.RoomActivity;
-import com.example.projethembert.entities.LeaderboardEntry;
-import com.example.projethembert.entities.bonuses.BonusFactory;
 import com.example.projethembert.entities.FightResult;
+import com.example.projethembert.entities.LeaderboardEntry;
 import com.example.projethembert.entities.Player;
 import com.example.projethembert.entities.Room;
+import com.example.projethembert.entities.bonuses.BonusFactory;
 import com.example.projethembert.entities.enums.Difficulty;
 import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.repository.Database;
-import com.example.projethembert.repository.utils.DateConverter;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Classe de la page d'accueil du jeu
  */
 public class MainActivity extends AppCompatActivity {
-    /// Nombre de salles
-    private static final int NB_ROOMS = 16;
-
     /// Nombre de bonus
     private static final int NB_BONUSES = 2;
-
-    ///RNG
+    /// Nombre de salles
+    private static final int NB_ROOMS = 16;
+    /// RNG
     private static final Random random = new Random();
 
     /// Liste des salles
     private final ArrayList<Room> rooms = new ArrayList<>(NB_ROOMS);
-
+    /// Configuration de la partie
+    private Config config;
     /// Message de résultat de combat
     private TextView fightResultLabel;
-
     /// Grille de ImageButton
     private GridLayout grid;
     /// Indicateur de points de vie
-    ///
     private TextView health;
-
-    /// Joueur
-    private Player player;
-
-    /// Indicateur de puissance
-    private TextView power;
-
-    /// Indicateur de salles non explorées
-    private TextView unexploredRooms;
-
+    /// Indique si une partie est en cours
+    private boolean isGameRunning;
     /// Indicateur de niveau
     private TextView level;
-
     /// Bouton de passage à la manche suivante
     private ImageButton nextRound;
-
-    /// Configuration de la partie
-    private Config config;
-
+    /// Joueur
+    private Player player;
+    /// Indicateur de puissance
+    private TextView power;
+    /// Indicateur de salles non explorées
+    private TextView remainingRooms;
     /// Callback après le déroulement d'un combat
     private final ActivityResultLauncher<Intent> dungeonLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    // TODO gestion erreur
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
                         player = intent.getParcelableExtra(IntentKeys.PLAYER);
                         FightResult fightResult = intent.getParcelableExtra(IntentKeys.FIGHT_RESULT);
                         handleFightResult(fightResult);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Une erreur s'est produite lors" +
+                                        "du combat",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
     );
 
+    // TODO checker config a été modifiée sinon ne pas reset
+    /// Callback après l'ouverture de la page de configuration
     private final ActivityResultLauncher<Intent> configLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    // TODO erreurs
-                    if (result.getResultCode() == RESULT_OK){
+                    if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
                         config = intent.getParcelableExtra(IntentKeys.CONFIG);
                         TextView difficulty = findViewById(R.id.difficulty);
                         difficulty.setText(config.getDifficulty().getName());
                         reset(true);
+                    } else {
+                        Toast.makeText(MainActivity.this,
+                                "Une erreur s'est produite lors de la récupération de la configuration",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
     );
 
-    /**
-     * Crée le menu d'options
-     *
-     * @param menu The options menu in which you place your items.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -138,18 +129,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Gère le clic sur les options du menu
-     *
-     * @param item The menu item that was selected.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings){
+        if (item.getItemId() == R.id.settings) {
             openConfigActivity();
             return true;
         }
-        if (item.getItemId() == R.id.leaderboard){
+        if (item.getItemId() == R.id.leaderboard) {
             openLeaderboardActivity();
             return true;
         }
@@ -163,13 +149,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Initialise l'activité
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *                           previously being shut down then this Bundle contains the data it most
-     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         player = new Player(config);
 
         fightResultLabel = findViewById(R.id.fight_result_content);
-        unexploredRooms = findViewById(R.id.unexploredRooms);
+        remainingRooms = findViewById(R.id.unexploredRooms);
         health = findViewById(R.id.health);
         power = findViewById(R.id.power);
         grid = findViewById(R.id.buttonsGrid);
@@ -197,6 +176,22 @@ public class MainActivity extends AppCompatActivity {
         updatePlayerStats();
     }
 
+    /// Sélectionne un nombre (NB_BONUSES) d'Id de salles aléatoirements
+    private HashSet<Integer> chooseRoomsToAddBonuses() {
+        HashSet<Integer> indexes = new HashSet<>();
+        for (int i = 0; i < NB_BONUSES; i++) {
+            int room = random.nextInt(NB_ROOMS);
+            indexes.add(room);
+        }
+
+        return indexes;
+    }
+
+    /// Supprime la salle lorsqu'elle est terminée
+    private void clearRoom(int roomId) {
+        rooms.set(roomId - 1, null);
+    }
+
     /**
      * Crée les boutons et les ajoute à la grille
      */
@@ -205,7 +200,8 @@ public class MainActivity extends AppCompatActivity {
             ImageButton button = new ImageButton(this);
             button.setImageResource(R.drawable.door_monster);
             button.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            button.setOnClickListener(openFightActivity(i + 1));
+            int finalI = i;
+            button.setOnClickListener(v -> openFightActivity(finalI + 1));
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
@@ -221,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
             drawable.setCornerRadius(24f);
             drawable.setStroke(4, Color.BLACK);
             button.setBackground(drawable);
-
 
             grid.addView(button);
         }
@@ -242,43 +237,65 @@ public class MainActivity extends AppCompatActivity {
      * @param fightResult Résultat du combat
      */
     private void handleFightResult(FightResult fightResult) {
-        GridLayout grid = findViewById(R.id.buttonsGrid);
-        ImageButton clearedRoomBtn = (ImageButton) grid.getChildAt(fightResult.getRoomId() - 1);
-        if (fightResult.getResult() == FightResultEnum.WON) {
-            String unexploredRoomsCount = String.valueOf(Integer.parseInt(unexploredRooms.getText().toString()) - 1);
-            unexploredRooms.setText(unexploredRoomsCount);
-            rooms.set(fightResult.getRoomId() - 1, null);
-            clearedRoomBtn.setImageResource(R.drawable.door_cross_mark);
-        } else {
-            clearedRoomBtn.setImageResource(R.drawable.door_dungeon);
-        }
+        // Si l'on revient d'un combat alors la partie commence
+        isGameRunning = true;
+
+        updateRoomState(fightResult);
 
         updatePlayerStats();
         fightResultLabel.setText(fightResult.getResult().getMessage());
+
         tryEndGame();
+    }
+
+    /// Met à jour l'UI en cas de défaite d'un combat
+    private void handleLoss(ImageButton exploredRoomBtn) {
+        exploredRoomBtn.setImageResource(R.drawable.door_dungeon);
+    }
+
+    /// Met à jour l'UI en cas de victoire
+    private void handleWin(FightResult fightResult, ImageButton exploredRoomBtn) {
+        updateRemainingRoomsCount();
+        clearRoom(fightResult.getRoomId());
+        exploredRoomBtn.setImageResource(R.drawable.door_cross_mark);
     }
 
     /**
      * Initialise la page avec les données du joueur et les salles
      */
     private void init() {
+        player.setDefaultStats();
         updatePlayerStats();
         BonusFactory.resetBonuses();
-        player.setDefaultStats();
-        HashSet<Integer> bonusesIndexes = new HashSet<>();
-        for (int i = 0; i < NB_BONUSES; i++){
-            int room = random.nextInt(NB_ROOMS);
-            bonusesIndexes.add(room);
-        }
+        remainingRooms.setText(String.valueOf(NB_ROOMS));
+
+        HashSet<Integer> bonusesIndexes = chooseRoomsToAddBonuses();
 
         for (int i = 0; i < NB_ROOMS; i++) {
             rooms.add(i, new Room(i + 1, player.getLevel(), config));
-            if (bonusesIndexes.contains(i)){
+            if (bonusesIndexes.contains(i)) {
                 rooms.get(i).setBonus(BonusFactory.createBonus());
             }
         }
+    }
 
-        unexploredRooms.setText(String.valueOf(NB_ROOMS));
+    /**
+     * Gère le passage de la partie au niveau supérieur
+     */
+    private void nextRound() {
+        nextRound.setVisibility(View.GONE);
+        player.levelUp();
+        reset(false);
+    }
+
+    /**
+     * Ouvre la page de configuration
+     */
+    private void openConfigActivity() {
+        Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
+        intent.putExtra(IntentKeys.IS_GAME_RUNNING, isGameRunning);
+        intent.putExtra(IntentKeys.CONFIG, config);
+        configLauncher.launch(intent);
     }
 
     /**
@@ -286,49 +303,93 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param index Indice de la salle (de 1 à NB_ROOM)
      */
-    private View.OnClickListener openFightActivity(int index) { //TODO Remplacer lambda
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (rooms.get(index - 1) == null) {
-                    Toast.makeText(MainActivity.this,
-                            getString(R.string.room_already_explored),
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Intent intent = new Intent(MainActivity.this, RoomActivity.class);
-                    intent.putExtra(IntentKeys.PLAYER, player);
-                    intent.putExtra(IntentKeys.ROOM, rooms.get(index - 1));
-                    dungeonLauncher.launch(intent);
-                }
-            }
-        };
+    private void openFightActivity(int index) {
+        if (rooms.get(index - 1) == null) {
+            Toast.makeText(MainActivity.this,
+                    getString(R.string.room_already_explored),
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(MainActivity.this, RoomActivity.class);
+            intent.putExtra(IntentKeys.PLAYER, player);
+            intent.putExtra(IntentKeys.ROOM, rooms.get(index - 1));
+            dungeonLauncher.launch(intent);
+        }
     }
 
     /**
-     * Réinitialise le jeu à l'état de démarrage de l'application
+     * Ouvre la page des scores
+     */
+    private void openLeaderboardActivity() {
+        Intent intent = new Intent(MainActivity.this, LeaderboardActivity.class);
+        startActivity(intent);
+    }
+
+    /// Supprime le bonus d'une salle quand il a été utilisé
+    private void removeBonusFromRoom(int roomId) {
+        rooms.get(roomId - 1).setBonus(null);
+    }
+
+    /**
+     * Réinitialise le jeu et l'interface
+     *
+     * @param newGame True si on recommence une partie, false si on recommence une manche
      */
     private void reset(boolean newGame) {
-        if (newGame){
+        resetGameState(newGame);
+        init();
+        resetUIElements();
+    }
+
+    /**
+     * Réinitialise l'état du jeu pour une nouvelle manche ou nouvelle partie
+     *
+     * @param newGame True si on recommence une partie, false si on recommence une manche
+     */
+    private void resetGameState(boolean newGame) {
+        if (newGame) {
+            isGameRunning = true;
             player = new Player(config);
         } else {
             player.setDefaultStats();
         }
+    }
 
-        init();
-
+    /**
+     * Réinitialise la grille de bouton et le résultat du combat sur l'UI
+     */
+    private void resetUIElements() {
         fightResultLabel.setText(R.string.waiting_);
 
         for (int i = 0; i < NB_ROOMS; i++) {
             grid.getChildAt(i).setEnabled(true);
-            ((ImageButton)grid.getChildAt(i)).setImageResource(R.drawable.door_monster);
+            ((ImageButton) grid.getChildAt(i)).setImageResource(R.drawable.door_monster);
         }
+    }
+
+    /**
+     * Sauvegarde le score de la partie en bdd s'il fait partie des 10 meilleurs
+     */
+    private void saveScore() {
+        LeaderboardEntry entry = new LeaderboardEntry(
+                config.getPlayerName(),
+                player.getLevel(),
+                player.getPower(),
+                new Date(),
+                getString(config.getDifficulty().getName())
+        );
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Database db = Database.getInstance(getApplicationContext());
+            db.leaderboardRepository().insertIfTop10(entry);
+        });
     }
 
     /**
      * Vérifie si la partie est terminée et affiche un message en conséquence
      */
     private void tryEndGame() {
-        if (unexploredRooms.getText().equals("0")) {
+        if (remainingRooms.getText().equals("0")) {
             fightResultLabel.setText(R.string.victory);
             disableButtonClick();
             nextRound.setVisibility(View.VISIBLE);
@@ -337,45 +398,38 @@ public class MainActivity extends AppCompatActivity {
         if (player.getHealth() <= 0) {
             fightResultLabel.setText(R.string.defeat);
             disableButtonClick();
+            saveScore();
         }
     }
 
-    private void updatePlayerStats(){
+    /**
+     * Met à jour les stats du joueur sur l'UI
+     */
+    private void updatePlayerStats() {
         health.setText(String.valueOf(player.getHealth()));
         power.setText(String.valueOf(player.getPower()));
         level.setText(getString(R.string.level, player.getLevel()));
     }
 
-    private void nextRound(){
-        nextRound.setVisibility(View.GONE);
-        player.levelUp();
-        reset(false);
+    /// Met à jour le nombre de salles non explorées restantes
+    private void updateRemainingRoomsCount() {
+        String remainingRoomsCount = String.valueOf(Integer.parseInt(remainingRooms.getText().toString()) - 1);
+        remainingRooms.setText(remainingRoomsCount);
     }
 
-    private void openConfigActivity(){
-        Intent intent = new Intent(MainActivity.this, ConfigurationActivity.class);
-        intent.putExtra(IntentKeys.CONFIG, config);
-        configLauncher.launch(intent);
-    }
+    /// Met à jour l'état de la salle après un combat
+    private void updateRoomState(FightResult fightResult) {
+        GridLayout grid = findViewById(R.id.buttonsGrid);
+        ImageButton exploredRoomBtn = (ImageButton) grid.getChildAt(fightResult.getRoomId() - 1);
 
-    private void openLeaderboardActivity(){
-        Intent intent = new Intent(MainActivity.this, LeaderBoardActivity.class);
-        startActivity(intent);
-    }
+        if (fightResult.isBonusUsed()) {
+            removeBonusFromRoom(fightResult.getRoomId());
+        }
 
-    private void saveScore(){
-        LeaderboardEntry entry = new LeaderboardEntry(
-            config.getPlayerName(),
-                player.getLevel(),
-                player.getPower(),
-                new Date(),
-                getString(config.getDifficulty().getName())
-        );
-
-        AsyncTask.execute(() -> {
-            Database db = Database.getInstance(getApplicationContext());
-            db.leaderboardRepository().insertIfTop10(entry);
-        });
-
+        if (fightResult.getResult() == FightResultEnum.WON) {
+            handleWin(fightResult, exploredRoomBtn);
+        } else {
+            handleLoss(exploredRoomBtn);
+        }
     }
 }

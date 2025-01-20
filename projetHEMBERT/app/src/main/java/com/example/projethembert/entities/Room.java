@@ -12,16 +12,30 @@ import com.example.projethembert.utils.Config;
  * Représente une salle
  */
 public class Room implements Parcelable {
-    /// Monstre
-    private final Monster monster;
+    public static final Creator<Room> CREATOR = new Creator<Room>() {
+        @Override
+        public Room createFromParcel(Parcel source) {
+            return new Room(source);
+        }
+
+        @Override
+        public Room[] newArray(int size) {
+            return new Room[size];
+        }
+    };
+    /// Configuration de la partie
+    private final Config config;
 
     /// Id de la salle
     private final int id;
 
-    private Bonus bonus;
-    private final Config config;
+    /// Monstre présent dans la salle
+    private final Monster monster;
 
-    public Room(int id, int level, Config config){
+    /// Bonus de la salle, peut être null car toutes les salles n'ont pas de bonus
+    private Bonus bonus;
+
+    public Room(int id, int level, Config config) {
         this.config = config;
         monster = new Monster(level, config);
         this.id = id;
@@ -47,28 +61,33 @@ public class Room implements Parcelable {
         dest.writeParcelable(config, flags);
     }
 
-    public static final Creator<Room> CREATOR = new Creator<Room>() {
-        @Override
-        public Room createFromParcel(Parcel source) {
-            return new Room(source);
-        }
+    /**
+     * Indique si la salle contient un bonus
+     * @return True si la salle contient un bonus, false si elle n'en contient pas ou s'il a été
+     * utilisé
+     */
+    public boolean hasNoBonus() {
+        return bonus == null;
+    }
 
-        @Override
-        public Room[] newArray(int size) {
-            return new Room[size];
-        }
-    };
+    /**
+     * Utilise le bonus
+     */
+    public void useBonus(Player player) {
+        bonus.use(player);
+        bonus = null;
+    }
 
-    public void setBonus(Bonus bonus) {
-        this.bonus = bonus;
+    public Monster getMonster() {
+        return monster;
     }
 
     public Bonus getBonus() {
         return bonus;
     }
 
-    public Monster getMonster() {
-        return monster;
+    public void setBonus(Bonus bonus) {
+        this.bonus = bonus;
     }
 
     public int getId() {

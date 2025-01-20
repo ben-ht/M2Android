@@ -8,4 +8,5 @@ public class IntentKeys {
     public static String FIGHT_RESULT = "fightResult";
     public static String ROOM = "room";
     public static String CONFIG = "config";
+    public static String IS_GAME_RUNNING = "isGameRunning";
 }

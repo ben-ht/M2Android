@@ -3,12 +3,10 @@ package com.example.projethembert.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -66,27 +64,21 @@ public class RoomActivity extends AppCompatActivity {
 
     /**
      * Effectue le combat et retourne le résultat à l'activité principale
-     * @return Résultat du combat
      */
-    private View.OnClickListener fight(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean playerWins = player.fight(room.getMonster());
+    private void fight(){
+        boolean playerWins = player.fight(room.getMonster());
 
-                Intent intent = new Intent();
-                intent.putExtra(IntentKeys.PLAYER, player);
-                if (playerWins){
-                    intent.putExtra(IntentKeys.FIGHT_RESULT,
-                            new FightResult(room.getId(), FightResultEnum.WON));
-                } else {
-                    intent.putExtra(IntentKeys.FIGHT_RESULT,
-                            new FightResult(room.getId(), FightResultEnum.LOST));
-                }
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        };
+        Intent intent = new Intent();
+        intent.putExtra(IntentKeys.PLAYER, player);
+        if (playerWins){
+            intent.putExtra(IntentKeys.FIGHT_RESULT,
+                    new FightResult(room.getId(), FightResultEnum.WON, room.hasNoBonus()));
+        } else {
+            intent.putExtra(IntentKeys.FIGHT_RESULT,
+                    new FightResult(room.getId(), FightResultEnum.LOST, room.hasNoBonus()));
+        }
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     /**
@@ -97,7 +89,7 @@ public class RoomActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra(IntentKeys.PLAYER, player);
         intent.putExtra(IntentKeys.FIGHT_RESULT,
-                new FightResult(room.getId(), FightResultEnum.FLED));
+                new FightResult(room.getId(), FightResultEnum.FLED, room.hasNoBonus()));
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -109,18 +101,6 @@ public class RoomActivity extends AppCompatActivity {
         return new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                flee();
-            }
-        };
-    }
-
-    /**
-     * Effectue une fuite au clic sur le bouton Fuir
-     */
-    private View.OnClickListener fleeOnClick(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 flee();
             }
         };
@@ -150,10 +130,10 @@ public class RoomActivity extends AppCompatActivity {
         monsterType.setText(room.getMonster().getType().getName());
 
         Button attackBtn = findViewById(R.id.attack);
-        attackBtn.setOnClickListener(fight());
+        attackBtn.setOnClickListener(v -> fight());
 
         Button fleeBtn = findViewById(R.id.flee);
-        fleeBtn.setOnClickListener(fleeOnClick());
+        fleeBtn.setOnClickListener(v-> flee());
 
         getOnBackPressedDispatcher().addCallback(this, fleeOnBackButton());
 
@@ -161,12 +141,7 @@ public class RoomActivity extends AppCompatActivity {
             bonusImage = findViewById(R.id.bonusImage);
             bonusImage.setImageResource(room.getBonus().getImage());
             bonusImage.setVisibility(View.VISIBLE);
-            bonusImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showBonusDialog();
-                }
-            });
+            bonusImage.setOnClickListener(v -> showBonusDialog());
         }
     }
 
@@ -175,7 +150,7 @@ public class RoomActivity extends AppCompatActivity {
          dialogBuilder.setTitle(room.getBonus().getName());
          dialogBuilder.setMessage(room.getBonus().getDescription());
          dialogBuilder.setPositiveButton(R.string.use, (dialog, which) -> {
-            room.getBonus().use(player);
+             room.useBonus(player);
             bonusImage.setVisibility(View.GONE);
             updatePlayerInfo();
 

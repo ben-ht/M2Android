@@ -9,18 +9,47 @@ import com.example.projethembert.entities.Player;
 
 import java.util.Random;
 
-public class PowerCharm implements Bonus{
+/**
+ * Représente un charme de puissance
+ */
+public class PowerCharm implements Bonus {
 
-    private static final Random RANDOM = new Random();
-    private static final int MIN_POWER = 5;
+    public static final Creator<PowerCharm> CREATOR = new Creator<PowerCharm>() {
+        @Override
+        public PowerCharm createFromParcel(Parcel source) {
+            return new PowerCharm(source);
+        }
+
+        @Override
+        public PowerCharm[] newArray(int size) {
+            return new PowerCharm[size];
+        }
+    };
+
+    /// Puissance maximale du charme de puissance
     private static final int MAX_POWER = 10;
-    private int name = R.string.power_charm;
-    private int description = R.string.power_charm_desc;
+
+    /// Puissance minimale du charme de puissance
+    private static final int MIN_POWER = 5;
+    private static final Random RANDOM = new Random();
+
+    /// Puissance comprise entre MIN_POWER et MAX_POWER
     private final int power;
 
+    /// Description affiché sur l'UI
+    private int description = R.string.power_charm_desc;
 
-    public PowerCharm(){
+    /// Nom affiché sur l'UI
+    private int name = R.string.power_charm;
+
+    public PowerCharm() {
         power = RANDOM.nextInt(MAX_POWER - MIN_POWER + 1) + MIN_POWER;
+    }
+
+    protected PowerCharm(Parcel in) {
+        name = in.readInt();
+        description = in.readInt();
+        power = in.readInt();
     }
 
     @Override
@@ -49,24 +78,6 @@ public class PowerCharm implements Bonus{
     public int getDescription() {
         return description;
     }
-
-    protected PowerCharm(Parcel in) {
-        name = in.readInt();
-        description = in.readInt();
-        power = in.readInt();
-    }
-
-    public static final Creator<PowerCharm> CREATOR = new Creator<PowerCharm>() {
-        @Override
-        public PowerCharm createFromParcel(Parcel source) {
-            return new PowerCharm(source);
-        }
-
-        @Override
-        public PowerCharm[] newArray(int size) {
-            return new PowerCharm[size];
-        }
-    };
 
     @Override
     public int getImage() {

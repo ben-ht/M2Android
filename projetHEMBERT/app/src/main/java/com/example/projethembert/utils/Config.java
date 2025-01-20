@@ -7,39 +7,10 @@ import androidx.annotation.NonNull;
 
 import com.example.projethembert.entities.enums.Difficulty;
 
+/**
+ * Représente la configuration de la partie, définie par le joueur
+ */
 public class Config implements Parcelable {
-    private Difficulty difficulty;
-    private String playerName;
-
-    public Config(Difficulty difficulty){
-        this.difficulty = difficulty;
-    }
-
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setDifficulty(Difficulty difficulty){
-        this.difficulty = difficulty;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeInt(difficulty.ordinal());
-    }
-
-    protected Config(Parcel in){
-        difficulty = Difficulty.values()[in.readInt()];
-    }
 
     public static final Creator<Config> CREATOR = new Creator<Config>() {
         @Override
@@ -52,4 +23,41 @@ public class Config implements Parcelable {
             return new Config[size];
         }
     };
+
+    /// Difficulté de la partie
+    private Difficulty difficulty;
+
+    /// Nom du joueur
+    private String playerName;
+
+    public Config(Difficulty difficulty) {
+        this.difficulty = difficulty;
+        this.playerName = "Player"; // TODO changer nom joueur
+    }
+
+    protected Config(Parcel in) {
+        difficulty = Difficulty.values()[in.readInt()];
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(difficulty.ordinal());
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
 }

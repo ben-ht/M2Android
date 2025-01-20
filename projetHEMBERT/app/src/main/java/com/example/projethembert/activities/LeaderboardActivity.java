@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LeaderBoardActivity extends AppCompatActivity {
+/**
+ * Page de scores
+ */
+public class LeaderboardActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
 
@@ -67,7 +70,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private void loadLeaderboard(String difficulty){
         AsyncTask.execute(() -> {
             Database db = Database.getInstance(getApplicationContext());
-            List<LeaderboardEntry> entries = db.leaderboardRepository().getBestScores("Moyen");
+            List<LeaderboardEntry> entries = db.leaderboardRepository().getBestScores(difficulty);
 
             runOnUiThread(() -> {
                 List<String> displayEntries = entriesToStringList(entries);
@@ -81,11 +84,11 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private List<String> entriesToStringList(List<LeaderboardEntry> entries){
         List<String> strings = new ArrayList<>();
         strings.add(String.format(Locale.FRANCE,
-                "%s %s %s %s %s",
+                "%s %s %s %s",
                 "Joueur", "Niveau", "Puissance", "Date"));
         for (LeaderboardEntry entry : entries){
             String str = String.format(Locale.FRANCE,
-                    "%s %d %d %d %s",
+                    "%s %d %d %s",
                     entry.getPlayerName(),
                     entry.getLevelReached(),
                     entry.getPower(),

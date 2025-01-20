@@ -4,6 +4,9 @@ import androidx.room.TypeConverter;
 
 import java.util.Date;
 
+/**
+ * Classe de convertion entre java.util.Date et une date SQLite
+ */
 public class DateConverter {
 
     @TypeConverter
