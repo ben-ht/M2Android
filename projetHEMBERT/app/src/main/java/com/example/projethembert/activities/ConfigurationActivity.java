@@ -43,6 +43,9 @@ public class ConfigurationActivity extends AppCompatActivity {
     /// Input de la puissance initiale du joueur
     private EditText playerPower;
 
+    /// Input du nom du joueur
+    private EditText playerName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,8 @@ public class ConfigurationActivity extends AppCompatActivity {
         playerHp = findViewById(R.id.player_hp);
         playerPower = findViewById(R.id.player_power);
         monsterPower = findViewById(R.id.monster_power);
+        playerName = findViewById(R.id.playerName);
+        playerName.setText(config.getPlayerName());
 
         startGame.setOnClickListener(v -> {
             if (isGameRunning){
@@ -74,7 +79,10 @@ public class ConfigurationActivity extends AppCompatActivity {
             }
         });
 
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> {
+            setResult(RESULT_OK);
+            finish();
+        });
 
         difficultyGroup.setOnCheckedChangeListener((group, checkedId) ->
                 onDifficultyChanged(checkedId));
@@ -173,6 +181,8 @@ public class ConfigurationActivity extends AppCompatActivity {
             config.getDifficulty().setPlayerPower(Integer.parseInt(playerPower.getText().toString()));
             config.getDifficulty().setMaxMonsterPower(Integer.parseInt(monsterPower.getText().toString()));
         }
+
+        config.setPlayerName(playerName.getText().toString());
 
         Intent intent = new Intent();
         intent.putExtra(IntentKeys.CONFIG, config);

@@ -32,11 +32,12 @@ public class Config implements Parcelable {
 
     public Config(Difficulty difficulty) {
         this.difficulty = difficulty;
-        this.playerName = "Player"; // TODO changer nom joueur
+        this.playerName = "Player 1";
     }
 
     protected Config(Parcel in) {
         difficulty = Difficulty.values()[in.readInt()];
+        playerName = in.readString();
     }
 
     @Override
@@ -47,6 +48,7 @@ public class Config implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(difficulty.ordinal());
+        dest.writeString(playerName);
     }
 
     public Difficulty getDifficulty() {
@@ -59,5 +61,9 @@ public class Config implements Parcelable {
 
     public String getPlayerName() {
         return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }
