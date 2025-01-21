@@ -57,4 +57,5 @@
     <string name="level">Niveau</string>
     <string name="date">Date</string>
     <string name="ok">OK</string>
+    <string name="already_explored_msg">La salle a déja été explorée</string>
 </resources>

@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             button.setImageResource(R.drawable.door_monster);
             button.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             int finalI = i;
-            button.setOnClickListener(v -> openFightActivity(finalI + 1));
+            button.setOnClickListener(v -> handleRoomBtnClick(finalI));
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
@@ -230,16 +230,6 @@ public class MainActivity extends AppCompatActivity {
             button.setBackground(drawable);
 
             grid.addView(button);
-        }
-    }
-
-    /**
-     * Désactive le clic sur les boutons des salles
-     */
-    private void disableButtonClick() {
-        for (int i = 0; i < NB_ROOMS; i++) {
-            // TODO afficher message au click
-            grid.getChildAt(i).setEnabled(false);
         }
     }
 
@@ -332,17 +322,17 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Ouvre la page de combat
      *
-     * @param index Indice de la salle (de 1 à NB_ROOM)
+     * @param roomId Id de la salle (de 0 à NB_ROOM - 1)
      */
-    private void openFightActivity(int index) {
-        if (rooms.get(index - 1) == null) {
+    private void openFightActivity(int roomId) {
+        if (rooms.get(roomId) == null) {
             Toast.makeText(MainActivity.this,
                     getString(R.string.room_already_explored),
                     Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(MainActivity.this, RoomActivity.class);
             intent.putExtra(IntentKeys.PLAYER, player);
-            intent.putExtra(IntentKeys.ROOM, rooms.get(index - 1));
+            intent.putExtra(IntentKeys.ROOM, rooms.get(roomId));
             dungeonLauncher.launch(intent);
         }
     }
@@ -392,7 +382,6 @@ public class MainActivity extends AppCompatActivity {
         fightResultContent.setText(R.string.waiting_);
 
         for (int i = 0; i < NB_ROOMS; i++) {
-            grid.getChildAt(i).setEnabled(true);
             ((ImageButton) grid.getChildAt(i)).setImageResource(R.drawable.door_monster);
         }
     }
@@ -462,13 +451,11 @@ public class MainActivity extends AppCompatActivity {
     private void tryEndGame() {
         if (remainingRooms.getText().equals("0")) {
             fightResultContent.setText(R.string.victory);
-            disableButtonClick();
             nextRound.setVisibility(View.VISIBLE);
         }
 
         if (player.getHealth() <= 0) {
             fightResultContent.setText(R.string.defeat);
-            disableButtonClick();
             saveScore();
         }
     }
@@ -501,6 +488,16 @@ public class MainActivity extends AppCompatActivity {
             handleWin(fightResult, exploredRoomBtn);
         } else {
             handleLoss(exploredRoomBtn);
+        }
+    }
+
+    private void handleRoomBtnClick(int roomId){
+        if (rooms.get(roomId) == null){
+            Toast.makeText(MainActivity.this,
+                    R.string.already_explored_msg,
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            openFightActivity(roomId);
         }
     }
 }
