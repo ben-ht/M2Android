@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -21,12 +22,16 @@ import com.example.projethembert.entities.enums.Difficulty;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
 
+import java.util.Objects;
+
 /**
  * Page de configuration
  */
 public class ConfigurationActivity extends AppCompatActivity {
     /// Configuration de la partie
     private Config config;
+
+    private Config oldConfig;
 
     /// Bouton radio pour la configuration personnalisée
     private RadioButton customButton;
@@ -59,6 +64,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         config = intent.getParcelableExtra(IntentKeys.CONFIG);
+        oldConfig = config;
         boolean isGameRunning = intent.getBooleanExtra(IntentKeys.IS_GAME_RUNNING, true);
 
         RadioGroup difficultyGroup = findViewById(R.id.difficultyGroup);
@@ -72,7 +78,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         playerName.setText(config.getPlayerName());
 
         startGame.setOnClickListener(v -> {
-            if (isGameRunning){
+            if (isGameRunning && hasConfigChanged()){
                 showRestartGameDialog();
             } else {
                 startGame();
@@ -187,5 +193,13 @@ public class ConfigurationActivity extends AppCompatActivity {
         intent.putExtra(IntentKeys.CONFIG, config);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    private boolean hasConfigChanged(){
+        return !Objects.equals(config.getPlayerName(), oldConfig.getPlayerName())
+                && config.getDifficulty().getName() == oldConfig.getDifficulty().getName()
+                && config.getDifficulty().getPlayerHealth() == oldConfig.getDifficulty().getPlayerHealth()
+                && config.getDifficulty().getPlayerPower() == oldConfig.getDifficulty().getPlayerPower()
+                && config.getDifficulty().getMaxMonsterPower() == oldConfig.getDifficulty().getMaxMonsterPower();
     }
 }

@@ -56,4 +56,5 @@
     <string name="player_1">Player 1</string>
     <string name="level">Niveau</string>
     <string name="date">Date</string>
+    <string name="ok">OK</string>
 </resources>

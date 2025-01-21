@@ -30,6 +30,7 @@ public class Config implements Parcelable {
     /// Nom du joueur
     private String playerName;
 
+
     public Config(Difficulty difficulty, String playerName) {
         this.difficulty = difficulty;
         this.playerName = playerName;

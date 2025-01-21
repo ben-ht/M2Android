@@ -16,8 +16,10 @@ import com.example.projethembert.entities.LeaderboardEntry;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Adapter pour afficher le tableau des scores
+ */
 public class LeaderboardAdapter extends ArrayAdapter<LeaderboardEntry> {
     private final LayoutInflater inflater;
 

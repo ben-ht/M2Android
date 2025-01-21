@@ -28,9 +28,8 @@ public interface LeaderboardRepository {
 
     /**
      * Supprime les scores qui sont au delà du top 10 pour ne garder que les 10 meilleurs en bdd
-     * @param difficulty
      */
-    @Query("DELETE FROM leaderboard WHERE id NOT IN (SELECT id FROM leaderboard WHERE difficulty = :difficulty ORDER BY levelReached DESC LIMIT 10)")
+    @Query("DELETE FROM leaderboard WHERE difficulty = :difficulty AND id NOT IN (SELECT id FROM leaderboard WHERE difficulty = :difficulty ORDER BY levelReached DESC LIMIT 10)")
     void deleteExcessScores(String difficulty);
 
     /**

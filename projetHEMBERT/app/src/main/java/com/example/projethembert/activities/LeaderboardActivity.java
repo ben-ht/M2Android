@@ -1,10 +1,13 @@
 package com.example.projethembert.activities;
 
-import android.os.AsyncTask;
+import static com.example.projethembert.entities.enums.Difficulty.DB_EASY;
+import static com.example.projethembert.entities.enums.Difficulty.DB_HARD;
+import static com.example.projethembert.entities.enums.Difficulty.DB_MEDIUM;
+import static com.example.projethembert.entities.enums.Difficulty.HARD;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -15,18 +18,20 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.projethembert.R;
 import com.example.projethembert.entities.LeaderboardEntry;
+import com.example.projethembert.entities.enums.Difficulty;
 import com.example.projethembert.repository.Database;
 import com.example.projethembert.utils.LeaderboardAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Page de scores
  */
 public class LeaderboardActivity extends AppCompatActivity {
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private LeaderboardAdapter adapter;
 
@@ -53,8 +58,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                // TODO switch case
-                String difficulty = tab.getText().toString();
+                String difficultyTabText = tab.getText().toString();
+                String difficulty = Difficulty.getInDatabaseName(
+                        LeaderboardActivity.this,
+                        difficultyTabText);
+
                 loadLeaderboard(difficulty);
             }
 
@@ -70,12 +78,19 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdown();
+    }
+
     /**
      * Remplit le tableau avec les données de la bdd
+     *
      * @param difficulty Difficulté sélectionnée sur l'onglet
      */
-    private void loadLeaderboard(String difficulty){
-        AsyncTask.execute(() -> {
+    private void loadLeaderboard(String difficulty) {
+        executor.execute(() -> {
             Database db = Database.getInstance(getApplicationContext());
             List<LeaderboardEntry> entries = db.leaderboardRepository().getBestScores(difficulty);
 
@@ -86,4 +101,5 @@ public class LeaderboardActivity extends AppCompatActivity {
             });
         });
     }
+
 }

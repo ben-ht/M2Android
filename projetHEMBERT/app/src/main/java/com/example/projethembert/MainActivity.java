@@ -67,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String USERNAME_KEY = "username";
     /// RNG
     private static final Random random = new Random();
-
     /// Liste des salles
     private final ArrayList<Room> rooms = new ArrayList<>(NB_ROOMS);
+    /// Permet d'éxécuter une tâche en asynchrone
+    ExecutorService executor = Executors.newSingleThreadExecutor();
     /// Configuration de la partie
     private Config config;
     /// Message de résultat de combat
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
             }
     );
 
-    // TODO checker config a été modifiée sinon ne pas reset
     /// Callback après l'ouverture de la page de configuration
     private final ActivityResultLauncher<Intent> configLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -125,11 +125,6 @@ public class MainActivity extends AppCompatActivity {
                             difficulty.setText(config.getDifficulty().getName());
                             reset(true);
                         }
-                    } else {
-                        // TODO Back button
-                        Toast.makeText(MainActivity.this,
-                                "Une erreur s'est produite lors de la récupération de la configuration",
-                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -178,10 +173,18 @@ public class MainActivity extends AppCompatActivity {
 
         if (username == null) {
             showUsernameDialog(sharedPreferences);
+        } else {
+            initializeGame(sharedPreferences);
         }
 
         grid = findViewById(R.id.buttonsGrid);
         createButtons();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdown();
     }
 
     /// Sélectionne un nombre (NB_BONUSES) d'Id de salles aléatoirements
@@ -235,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void disableButtonClick() {
         for (int i = 0; i < NB_ROOMS; i++) {
+            // TODO afficher message au click
             grid.getChildAt(i).setEnabled(false);
         }
     }
@@ -402,10 +406,11 @@ public class MainActivity extends AppCompatActivity {
                 player.getLevel(),
                 player.getPower(),
                 new Date(),
-                getString(config.getDifficulty().getName())
+                Difficulty.getInDatabaseName(
+                        MainActivity.this,
+                        getString(config.getDifficulty().getName()))
         );
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             Database db = Database.getInstance(getApplicationContext());
             db.leaderboardRepository().insertIfTop10(entry);
@@ -426,8 +431,6 @@ public class MainActivity extends AppCompatActivity {
             if (!username.isBlank()) {
                 preferences.edit().putString(USERNAME_KEY, username).apply();
                 initializeGame(preferences);
-            } else {
-                showUsernameDialog(preferences);
             }
         });
 
