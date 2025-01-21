@@ -12,10 +12,11 @@
         android:id="@+id/leaderboardTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Leaderboard"
+        android:text="@string/leaderboard"
         android:textStyle="bold"
         android:textSize="24sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_marginTop="16dp"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/difficultyTab"
@@ -27,19 +28,19 @@
             android:id="@+id/tab_easy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Facile" />
+            android:text="@string/easy" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_hard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Moyen" />
+            android:text="@string/medium" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_custom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Difficile" />
+            android:text="@string/hard" />
     </com.google.android.material.tabs.TabLayout>
 
 

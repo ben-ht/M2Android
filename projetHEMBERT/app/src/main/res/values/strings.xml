@@ -47,4 +47,8 @@
     <string name="scores">Scores</string>
     <string name="yes">OUI\n</string>
     <string name="back">Retour</string>
+    <string name="player_power">Puissance du joueur</string>
+    <string name="max_monster_power">Puissance max des monstre</string>
+    <string name="player_name">Nom du joueur</string>
+    <string name="leaderboard">Tableau des scores</string>
 </resources>

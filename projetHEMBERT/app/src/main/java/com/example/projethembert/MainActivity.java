@@ -110,11 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
-                        config = intent.getParcelableExtra(IntentKeys.CONFIG);
-                        TextView difficulty = findViewById(R.id.difficulty);
-                        difficulty.setText(config.getDifficulty().getName());
-                        reset(true);
+                        if (intent != null) {
+                            config = intent.getParcelableExtra(IntentKeys.CONFIG);
+                            TextView difficulty = findViewById(R.id.difficulty);
+                            difficulty.setText(config.getDifficulty().getName());
+                            reset(true);
+                        }
                     } else {
+                        // TODO Back button
                         Toast.makeText(MainActivity.this,
                                 "Une erreur s'est produite lors de la récupération de la configuration",
                                 Toast.LENGTH_SHORT).show();

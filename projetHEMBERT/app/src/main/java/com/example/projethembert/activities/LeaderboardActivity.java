@@ -2,6 +2,8 @@ package com.example.projethembert.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -14,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.projethembert.R;
 import com.example.projethembert.entities.LeaderboardEntry;
 import com.example.projethembert.repository.Database;
+import com.example.projethembert.utils.LeaderboardAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import java.util.Locale;
  */
 public class LeaderboardActivity extends AppCompatActivity {
 
-    private ArrayAdapter<String> adapter;
+    private LeaderboardAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +42,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
 
         ListView lv = findViewById(R.id.leaderboardList);
-        adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                new ArrayList<>()
-        );
+        adapter = new LeaderboardAdapter(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View header = inflater.inflate(R.layout.leaderboard_header, lv, false);
+        lv.addHeaderView(header);
         lv.setAdapter(adapter);
 
 
@@ -73,9 +75,8 @@ public class LeaderboardActivity extends AppCompatActivity {
             List<LeaderboardEntry> entries = db.leaderboardRepository().getBestScores(difficulty);
 
             runOnUiThread(() -> {
-                List<String> displayEntries = entriesToStringList(entries);
                 adapter.clear();
-                adapter.addAll(displayEntries);
+                adapter.addAll(entries);
                 adapter.notifyDataSetChanged();
             });
         });
