@@ -1,16 +1,20 @@
 package com.example.projethembert;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,6 +26,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -56,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int NB_BONUSES = 2;
     /// Nombre de salles
     private static final int NB_ROOMS = 16;
+    /// Nom des préférences
+    private static final String PREFERENCES = "Preferences";
+    /// Clé du nom d'utilisateur dans les préférences
+    private static final String USERNAME_KEY = "username";
     /// RNG
     private static final Random random = new Random();
 
@@ -163,21 +172,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        config = new Config(Difficulty.MEDIUM);
-        player = new Player(config);
 
-        fightResultLabel = findViewById(R.id.fight_result_content);
-        remainingRooms = findViewById(R.id.unexploredRooms);
-        health = findViewById(R.id.health);
-        power = findViewById(R.id.power);
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+        String username = sharedPreferences.getString(USERNAME_KEY, null);
+
+        if (username == null) {
+            showUsernameDialog(sharedPreferences);
+        }
+
         grid = findViewById(R.id.buttonsGrid);
-        level = findViewById(R.id.level);
-        nextRound = findViewById(R.id.nextRound);
-        nextRound.setOnClickListener(v -> nextRound());
-
-        init();
         createButtons();
-        updatePlayerStats();
     }
 
     /// Sélectionne un nombre (NB_BONUSES) d'Id de salles aléatoirements
@@ -267,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Initialise la page avec les données du joueur et les salles
      */
-    private void init() {
+    private void initPlayerAndRooms() {
         player.setDefaultStats();
         updatePlayerStats();
         BonusFactory.resetBonuses();
@@ -281,6 +285,25 @@ public class MainActivity extends AppCompatActivity {
                 rooms.get(i).setBonus(BonusFactory.createBonus());
             }
         }
+    }
+
+    /// Initialise le jeu à l'ouverture de l'application
+    private void initializeGame(SharedPreferences sharedPreferences) {
+        String username = sharedPreferences.getString(USERNAME_KEY, null);
+
+        config = new Config(Difficulty.MEDIUM, username);
+        player = new Player(config);
+
+        fightResultLabel = findViewById(R.id.fight_result_content);
+        remainingRooms = findViewById(R.id.unexploredRooms);
+        health = findViewById(R.id.health);
+        power = findViewById(R.id.power);
+        level = findViewById(R.id.level);
+        nextRound = findViewById(R.id.nextRound);
+
+        nextRound.setOnClickListener(v -> nextRound());
+
+        initPlayerAndRooms();
     }
 
     /**
@@ -340,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void reset(boolean newGame) {
         resetGameState(newGame);
-        init();
+        initPlayerAndRooms();
         resetUIElements();
     }
 
@@ -386,6 +409,47 @@ public class MainActivity extends AppCompatActivity {
         executor.execute(() -> {
             Database db = Database.getInstance(getApplicationContext());
             db.leaderboardRepository().insertIfTop10(entry);
+        });
+    }
+
+    /// Affiche la modale pour indiquer le nom du joueur lors de la première ouverture
+    /// de l'application
+    private void showUsernameDialog(SharedPreferences preferences) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choisis un nom d'utilisateur");
+        EditText input = new EditText(this);
+        input.setHint("Nom d'utilisateur");
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            String username = input.getText().toString().trim();
+            if (!username.isBlank()) {
+                preferences.edit().putString(USERNAME_KEY, username).apply();
+                initializeGame(preferences);
+            } else {
+                showUsernameDialog(preferences);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setEnabled(!input.getText().toString().isBlank());
+
+            }
         });
     }
 
