@@ -108,7 +108,7 @@
     </TableLayout>
 
     <TextView
-        android:id="@+id/fight_result_title"
+        android:id="@+id/fightResultTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -119,14 +119,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
     <TextView
-        android:id="@+id/fight_result_content"
+        android:id="@+id/fightResultContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/waiting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fight_result_title" />
+        app:layout_constraintTop_toBottomOf="@+id/fightResultTitle" />
 
     <ImageButton
         android:id="@+id/nextRound"
@@ -135,8 +135,8 @@
         android:contentDescription="@string/next_round"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fight_result_content"
-        app:layout_constraintTop_toBottomOf="@+id/fight_result_title"
+        app:layout_constraintStart_toEndOf="@+id/fightResultContent"
+        app:layout_constraintTop_toBottomOf="@+id/fightResultTitle"
         app:srcCompat="@android:drawable/ic_media_ff" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,13 +61,13 @@ public class ConfigurationActivity extends AppCompatActivity {
         config = intent.getParcelableExtra(IntentKeys.CONFIG);
         boolean isGameRunning = intent.getBooleanExtra(IntentKeys.IS_GAME_RUNNING, true);
 
-        RadioGroup difficultyGroup = findViewById(R.id.difficulty_group);
+        RadioGroup difficultyGroup = findViewById(R.id.difficultyGroup);
         customButton = findViewById(R.id.radio_custom);
         Button startGame = findViewById(R.id.startGame);
         Button backButton = findViewById(R.id.back);
-        playerHp = findViewById(R.id.player_hp);
-        playerPower = findViewById(R.id.player_power);
-        monsterPower = findViewById(R.id.monster_power);
+        playerHp = findViewById(R.id.playerHealth);
+        playerPower = findViewById(R.id.playerPower);
+        monsterPower = findViewById(R.id.monsterPower);
         playerName = findViewById(R.id.playerName);
         playerName.setText(config.getPlayerName());
 
@@ -161,9 +161,8 @@ public class ConfigurationActivity extends AppCompatActivity {
      */
     private void showRestartGameDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Redémarrer la partie");
-        dialogBuilder.setMessage("Changer de difficulté arrêtera la partie en cours," +
-                " êtes vous sur de vouloir continuer ?");
+        dialogBuilder.setTitle(R.string.restart_game);
+        dialogBuilder.setMessage(R.string.restart_game_warning);
         dialogBuilder.setPositiveButton(R.string.yes, (dialog, which) -> {
             dialog.dismiss();
             startGame();

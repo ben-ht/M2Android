@@ -34,7 +34,7 @@
     <string name="magic_potion_desc">Restaure 1 à 3 points de vie</string>
     <string name="use">Utiliser</string>
     <string name="cancel">Annuler</string>
-    <string name="level">"Niveau: %d"</string>
+    <string name="level_with_placeholder">"Niveau: %d"</string>
     <string name="niveau_1">Niveau: 1</string>
     <string name="next_round">Next round</string>
     <string name="replay">Rejouer</string>
@@ -51,4 +51,9 @@
     <string name="max_monster_power">Puissance max des monstre</string>
     <string name="player_name">Nom du joueur</string>
     <string name="leaderboard">Tableau des scores</string>
+    <string name="restart_game">Redémarrer la partie</string>
+    <string name="restart_game_warning">Changer de difficulté arrêtera la partie en cours, êtes vous sur de vouloir continuer ?</string>
+    <string name="player_1">Player 1</string>
+    <string name="level">Niveau</string>
+    <string name="date">Date</string>
 </resources>

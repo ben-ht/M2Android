@@ -15,39 +15,29 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.projethembert.entities.Room;
-import com.example.projethembert.entities.enums.FightResultEnum;
-import com.example.projethembert.utils.IntentKeys;
 import com.example.projethembert.R;
 import com.example.projethembert.entities.FightResult;
 import com.example.projethembert.entities.Player;
+import com.example.projethembert.entities.Room;
+import com.example.projethembert.entities.enums.FightResultEnum;
+import com.example.projethembert.utils.IntentKeys;
 
 /**
  * Page de combat
  */
 public class RoomActivity extends AppCompatActivity {
+    /// Affichage du bonus
+    private ImageView bonusImage;
+    /// Affichage de la santé du joueur
+    private TextView health;
     /// Joueur
     private Player player;
-
+    /// Affichage de la puissance du joueur
+    private TextView power;
     /// Salle
     private Room room;
 
-    /// Affichage de la santé du joueur
-    private TextView health;
 
-    /// Affichage de la puissance du joueur
-    private TextView power;
-
-    /// Affichage du bonus
-    private ImageView bonusImage;
-
-    /**
-     * Initialisation de l'activité
-     * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +55,12 @@ public class RoomActivity extends AppCompatActivity {
     /**
      * Effectue le combat et retourne le résultat à l'activité principale
      */
-    private void fight(){
+    private void fight() {
         boolean playerWins = player.fight(room.getMonster());
 
         Intent intent = new Intent();
         intent.putExtra(IntentKeys.PLAYER, player);
-        if (playerWins){
+        if (playerWins) {
             intent.putExtra(IntentKeys.FIGHT_RESULT,
                     new FightResult(room.getId(), FightResultEnum.WON, room.hasNoBonus()));
         } else {
@@ -84,7 +74,7 @@ public class RoomActivity extends AppCompatActivity {
     /**
      * Retourne la fuite à l'activité principale
      */
-    private void flee(){
+    private void flee() {
         player.flee();
         Intent intent = new Intent();
         intent.putExtra(IntentKeys.PLAYER, player);
@@ -97,7 +87,7 @@ public class RoomActivity extends AppCompatActivity {
     /**
      * Effectue une fuite à l'appui sur le bouton retour
      */
-    private OnBackPressedCallback fleeOnBackButton(){
+    private OnBackPressedCallback fleeOnBackButton() {
         return new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -109,7 +99,7 @@ public class RoomActivity extends AppCompatActivity {
     /**
      * Initialise la page (textviews, events...)
      */
-    private void initUI(){
+    private void initUI() {
         Intent intent = getIntent();
         player = intent.getParcelableExtra(IntentKeys.PLAYER);
         room = intent.getParcelableExtra(IntentKeys.ROOM);
@@ -119,8 +109,7 @@ public class RoomActivity extends AppCompatActivity {
 
         updatePlayerInfo();
 
-        // TODO replace opponent
-        TextView monsterPower = findViewById(R.id.opponent_power);
+        TextView monsterPower = findViewById(R.id.monsterPower);
         monsterPower.setText(String.valueOf(room.getMonster().getPower()));
 
         ImageView monsterImage = findViewById(R.id.monsterImage);
@@ -133,11 +122,11 @@ public class RoomActivity extends AppCompatActivity {
         attackBtn.setOnClickListener(v -> fight());
 
         Button fleeBtn = findViewById(R.id.flee);
-        fleeBtn.setOnClickListener(v-> flee());
+        fleeBtn.setOnClickListener(v -> flee());
 
         getOnBackPressedDispatcher().addCallback(this, fleeOnBackButton());
 
-        if (room.getBonus() != null){
+        if (room.getBonus() != null) {
             bonusImage = findViewById(R.id.bonusImage);
             bonusImage.setImageResource(room.getBonus().getImage());
             bonusImage.setVisibility(View.VISIBLE);
@@ -145,22 +134,24 @@ public class RoomActivity extends AppCompatActivity {
         }
     }
 
-    private void showBonusDialog(){
-         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-         dialogBuilder.setTitle(room.getBonus().getName());
-         dialogBuilder.setMessage(room.getBonus().getDescription());
-         dialogBuilder.setPositiveButton(R.string.use, (dialog, which) -> {
-             room.useBonus(player);
+    /// Affiche la modale permettant d'utiliser un bonus
+    private void showBonusDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(room.getBonus().getName());
+        dialogBuilder.setMessage(room.getBonus().getDescription());
+        dialogBuilder.setPositiveButton(R.string.use, (dialog, which) -> {
+            room.useBonus(player);
             bonusImage.setVisibility(View.GONE);
             updatePlayerInfo();
 
             dialog.dismiss();
-         });
-         dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
-         dialogBuilder.create().show();
+        });
+        dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+        dialogBuilder.create().show();
     }
 
-    private void updatePlayerInfo(){
+    /// Rafraichit les stats du joueur sur l'UI
+    private void updatePlayerInfo() {
         health.setText(String.valueOf(player.getHealth()));
         power.setText(String.valueOf(player.getPower()));
     }

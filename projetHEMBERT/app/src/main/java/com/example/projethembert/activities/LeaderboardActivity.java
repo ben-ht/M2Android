@@ -53,6 +53,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                // TODO switch case
                 String difficulty = tab.getText().toString();
                 loadLeaderboard(difficulty);
             }
@@ -69,6 +70,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Remplit le tableau avec les données de la bdd
+     * @param difficulty Difficulté sélectionnée sur l'onglet
+     */
     private void loadLeaderboard(String difficulty){
         AsyncTask.execute(() -> {
             Database db = Database.getInstance(getApplicationContext());
@@ -80,25 +85,5 @@ public class LeaderboardActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             });
         });
-    }
-
-    private List<String> entriesToStringList(List<LeaderboardEntry> entries){
-        List<String> strings = new ArrayList<>();
-        strings.add(String.format(Locale.FRANCE,
-                "%s %s %s %s",
-                "Joueur", "Niveau", "Puissance", "Date"));
-        for (LeaderboardEntry entry : entries){
-            String str = String.format(Locale.FRANCE,
-                    "%s %d %d %s",
-                    entry.getPlayerName(),
-                    entry.getLevelReached(),
-                    entry.getPower(),
-                    entry.getDate()
-            );
-
-            strings.add(str);
-        }
-
-        return strings;
     }
 }

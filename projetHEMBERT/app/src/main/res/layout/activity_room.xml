@@ -8,7 +8,7 @@
     tools:context=".activities.RoomActivity">
 
     <TextView
-        android:id="@+id/player_label"
+        android:id="@+id/playerLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/player"
@@ -26,28 +26,28 @@
         android:contentDescription="@string/bonus_image"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/player_label"
+        app:layout_constraintStart_toEndOf="@+id/playerLabel"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bonus_health_potion" />
 
     <TextView
-        android:id="@+id/power_label"
+        android:id="@+id/powerLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/power"
-        app:layout_constraintEnd_toStartOf="@+id/health_label"
+        app:layout_constraintEnd_toStartOf="@+id/healthLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_label" />
+        app:layout_constraintTop_toBottomOf="@+id/playerLabel" />
 
     <TextView
-        android:id="@+id/health_label"
+        android:id="@+id/healthLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/health"
-        app:layout_constraintBaseline_toBaselineOf="@+id/power_label"
+        app:layout_constraintBaseline_toBaselineOf="@+id/powerLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/power_label" />
+        app:layout_constraintStart_toEndOf="@+id/powerLabel" />
 
     <TextView
         android:id="@+id/power"
@@ -55,8 +55,8 @@
         android:layout_height="16dp"
         android:text="@string/_100"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/power_label"
-        app:layout_constraintTop_toBottomOf="@+id/power_label" />
+        app:layout_constraintStart_toStartOf="@+id/powerLabel"
+        app:layout_constraintTop_toBottomOf="@+id/powerLabel" />
 
     <TextView
         android:id="@+id/health"
@@ -64,11 +64,11 @@
         android:layout_height="wrap_content"
         android:text="@string/_10"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/health_label"
-        app:layout_constraintTop_toBottomOf="@+id/health_label" />
+        app:layout_constraintStart_toStartOf="@+id/healthLabel"
+        app:layout_constraintTop_toBottomOf="@+id/healthLabel" />
 
     <TextView
-        android:id="@+id/opponent_label"
+        android:id="@+id/monsterLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/opponent"
@@ -86,7 +86,7 @@
         android:contentDescription="@string/image_of_the_monster"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/opponent_label"
+        app:layout_constraintTop_toBottomOf="@+id/monsterLabel"
         app:srcCompat="@drawable/monster_vampire" />
 
     <TextView
@@ -100,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/monsterImage" />
 
     <TextView
-        android:id="@+id/opponent_power"
+        android:id="@+id/monsterPower"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -126,6 +126,6 @@
         android:text="@string/flee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/attack"
-        app:layout_constraintTop_toBottomOf="@+id/opponent_power" />
+        app:layout_constraintTop_toBottomOf="@+id/monsterPower" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

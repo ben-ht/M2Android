@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     /// Configuration de la partie
     private Config config;
     /// Message de résultat de combat
-    private TextView fightResultLabel;
+    private TextView fightResultContent;
     /// Grille de ImageButton
     private GridLayout grid;
     /// Indicateur de points de vie
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         updateRoomState(fightResult);
 
         updatePlayerStats();
-        fightResultLabel.setText(fightResult.getResult().getMessage());
+        fightResultContent.setText(fightResult.getResult().getMessage());
 
         tryEndGame();
     }
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         config = new Config(Difficulty.MEDIUM, username);
         player = new Player(config);
 
-        fightResultLabel = findViewById(R.id.fight_result_content);
+        fightResultContent = findViewById(R.id.fightResultContent);
         remainingRooms = findViewById(R.id.unexploredRooms);
         health = findViewById(R.id.health);
         power = findViewById(R.id.power);
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
      * Réinitialise la grille de bouton et le résultat du combat sur l'UI
      */
     private void resetUIElements() {
-        fightResultLabel.setText(R.string.waiting_);
+        fightResultContent.setText(R.string.waiting_);
 
         for (int i = 0; i < NB_ROOMS; i++) {
             grid.getChildAt(i).setEnabled(true);
@@ -458,13 +458,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private void tryEndGame() {
         if (remainingRooms.getText().equals("0")) {
-            fightResultLabel.setText(R.string.victory);
+            fightResultContent.setText(R.string.victory);
             disableButtonClick();
             nextRound.setVisibility(View.VISIBLE);
         }
 
         if (player.getHealth() <= 0) {
-            fightResultLabel.setText(R.string.defeat);
+            fightResultContent.setText(R.string.defeat);
             disableButtonClick();
             saveScore();
         }
@@ -476,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
     private void updatePlayerStats() {
         health.setText(String.valueOf(player.getHealth()));
         power.setText(String.valueOf(player.getPower()));
-        level.setText(getString(R.string.level, player.getLevel()));
+        level.setText(getString(R.string.level_with_placeholder, player.getLevel()));
     }
 
     /// Met à jour le nombre de salles non explorées restantes
