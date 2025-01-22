@@ -3,6 +3,7 @@ package com.example.projethembert;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -209,7 +213,8 @@ public class MainActivity extends AppCompatActivity {
     private void createButtons() {
         for (int i = 0; i < NB_ROOMS; i++) {
             ImageButton button = new ImageButton(this);
-            button.setImageResource(R.drawable.door_monster);
+            button.setImageResource(R.drawable.door_padlock);
+            button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.secondary)));
             button.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             int finalI = i;
             button.setOnClickListener(v -> handleRoomBtnClick(finalI));
@@ -259,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
     private void handleWin(FightResult fightResult, ImageButton exploredRoomBtn) {
         updateRemainingRoomsCount();
         clearRoom(fightResult.getRoomId());
-        exploredRoomBtn.setImageResource(R.drawable.door_cross_mark);
+        exploredRoomBtn.setImageResource(R.drawable.door_cross);
     }
 
     /**
@@ -382,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
         fightResultContent.setText(R.string.waiting_);
 
         for (int i = 0; i < NB_ROOMS; i++) {
-            ((ImageButton) grid.getChildAt(i)).setImageResource(R.drawable.door_monster);
+            ((ImageButton) grid.getChildAt(i)).setImageResource(R.drawable.door_padlock);
         }
     }
 

@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/primary"
     tools:context=".activities.RoomActivity">
 
     <TextView
@@ -14,6 +15,7 @@
         android:text="@string/player"
         android:layout_marginTop="48dp"
         android:textSize="20sp"
+        android:textColor="@color/secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/power"
+        android:textColor="@color/secondaryVariant"
         app:layout_constraintEnd_toStartOf="@+id/healthLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerLabel" />
@@ -45,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/health"
+        android:textColor="@color/secondaryVariant"
         app:layout_constraintBaseline_toBaselineOf="@+id/powerLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/powerLabel" />
@@ -54,6 +58,7 @@
         android:layout_width="58dp"
         android:layout_height="16dp"
         android:text="@string/_100"
+        android:textColor="@color/secondaryVariant"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/powerLabel"
         app:layout_constraintTop_toBottomOf="@+id/powerLabel" />
@@ -63,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_10"
+        android:textColor="@color/secondaryVariant"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/healthLabel"
         app:layout_constraintTop_toBottomOf="@+id/healthLabel" />
@@ -72,6 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/opponent"
+        android:textColor="@color/secondary"
         android:textSize="20sp"
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/monster_vampire"
+        android:textColor="@color/secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/monsterImage" />
@@ -105,27 +113,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/_100"
+        android:textColor="@color/secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/monsterType" />
 
     <Button
         android:id="@+id/attack"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="@string/attack"
         app:layout_constraintBaseline_toBaselineOf="@+id/flee"
         app:layout_constraintEnd_toStartOf="@+id/flee"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/button" />
 
     <Button
         android:id="@+id/flee"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/flee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/attack"
-        app:layout_constraintTop_toBottomOf="@+id/monsterPower" />
+        app:layout_constraintTop_toBottomOf="@+id/monsterPower"
+        style="@style/button"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

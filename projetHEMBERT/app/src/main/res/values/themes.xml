@@ -1,9 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.ProjetHEMBERT" parent="Theme.Material3.DayNight">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.ProjetHEMBERT" parent="Theme.Material3.Light">
+
     </style>
+
+    <style name="button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@null</item>
+    </style>
+
+    <style name="editText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/secondaryVariant</item>
+        <item name="android:textColorHint">@color/secondaryVariant</item>
+        <item name="android:textCursorDrawable">@drawable/edittext_cursor</item>
+        <item name="android:backgroundTint">@color/secondary</item>
+    </style>
+
+    <style name="radio" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="colorControlActivated">@color/secondary</item>
+        <item name="colorControlNormal">@color/secondary</item>
+    </style>
+
 
     <style name="Theme.ProjetHEMBERT" parent="Base.Theme.ProjetHEMBERT" />
 </resources>

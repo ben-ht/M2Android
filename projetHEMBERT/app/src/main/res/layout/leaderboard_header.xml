@@ -12,6 +12,7 @@
         android:layout_weight="3"
         android:text="@string/player_1"
         android:textStyle="bold"
+        android:textColor="@color/secondaryVariant"
         android:gravity="center" />
 
     <TextView
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:text="@string/level"
+        android:textColor="@color/secondaryVariant"
         android:textStyle="bold"
         android:gravity="center" />
 
@@ -29,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:text="@string/power"
+        android:textColor="@color/secondaryVariant"
         android:textStyle="bold"
         android:gravity="center" />
 
@@ -38,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:text="@string/date"
+        android:textColor="@color/secondaryVariant"
         android:textStyle="bold"
         android:gravity="center" />
 </LinearLayout>

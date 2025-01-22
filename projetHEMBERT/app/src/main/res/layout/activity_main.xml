@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/primary"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/dungeon_master"
+        android:textColor="@color/secondary"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/niveau_1"
+        android:textColor="@color/secondaryVariant"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/difficulty"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -36,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/medium"
+        android:textColor="@color/secondaryVariant"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/level"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,11 +73,13 @@
 
             <TextView
                 android:padding="3dip"
+                android:textColor="@color/secondary"
                 android:text="@string/unexplored_rooms" />
 
             <TextView
                 android:id="@+id/unexploredRooms"
                 android:padding="3dip"
+                android:textColor="@color/secondaryVariant"
                 android:text="@string/_16" />
         </TableRow>
 
@@ -83,11 +89,13 @@
 
             <TextView
                 android:padding="3dip"
+                android:textColor="@color/secondary"
                 android:text="@string/power__colon" />
 
             <TextView
                 android:id="@+id/power"
                 android:padding="3dip"
+                android:textColor="@color/secondaryVariant"
                 android:text="@string/_100" />
         </TableRow>
 
@@ -97,11 +105,13 @@
 
             <TextView
                 android:padding="3dip"
+                android:textColor="@color/secondary"
                 android:text="@string/health__colon" />
 
             <TextView
                 android:id="@+id/health"
                 android:padding="3dip"
+                android:textColor="@color/secondaryVariant"
                 android:text="@string/_10" />
         </TableRow>
 
@@ -113,6 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/fight_result"
+        android:textColor="@color/secondary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,6 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/waiting"
+        android:textColor="@color/secondaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fightResultTitle" />
