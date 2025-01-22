@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.ProjetHEMBERT" parent="Theme.Material3.Light">
+    <style name="Base.Theme.ProjetHEMBERT" parent="Theme.Material3.DayNight">
 
     </style>
 

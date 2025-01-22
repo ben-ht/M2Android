@@ -7,6 +7,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFERENCES = "Preferences";
     /// Clé du nom d'utilisateur dans les préférences
     private static final String USERNAME_KEY = "username";
+    /// Clé du thème dans les préférences
+    private static final String THEME_KEY = "theme";
     /// RNG
     private static final Random random = new Random();
     /// Liste des salles
@@ -154,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
             reset(true);
             return true;
         }
+        if (item.getItemId() == R.id.display){
+            toggleTheme();
+            return true;
+        }
         if (item.getItemId() == R.id.quit) {
             finishAffinity();
         }
@@ -163,17 +171,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+        String username = sharedPreferences.getString(USERNAME_KEY, null);
+        boolean isDarkMode = sharedPreferences.getBoolean(THEME_KEY, true);
+        AppCompatDelegate.setDefaultNightMode(
+                isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
         EdgeToEdge.enable(this);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-        String username = sharedPreferences.getString(USERNAME_KEY, null);
 
         if (username == null) {
             showUsernameDialog(sharedPreferences);
@@ -510,6 +521,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gère le clic sur le bouton d'une salle
+     * @param roomId Id de la salle (de 1 à NB_ROOM)
+     */
     private void handleRoomBtnClick(int roomId){
         if (rooms.get(roomId) == null){
             Toast.makeText(MainActivity.this,
@@ -518,5 +533,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             openFightActivity(roomId);
         }
+    }
+
+    private void toggleTheme(){
+        SharedPreferences preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+        boolean isDarkMode = preferences.getBoolean(THEME_KEY, true);
+
+        boolean newMode = !isDarkMode;
+        preferences.edit().putBoolean(THEME_KEY, newMode).apply();
+
+        AppCompatDelegate.setDefaultNightMode(
+                isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
+
+        recreate(); // TODO doit fonctionner sans recréér
     }
 }
