@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     /// Indicateur de niveau
     private TextView level;
     /// Bouton de passage à la manche suivante
-    private ImageButton nextRound;
+    private ImageButton nextRound; // TODO css
     /// Joueur
     private Player player;
     /// Indicateur de puissance
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -386,9 +386,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetUIElements() {
         fightResultContent.setText(R.string.waiting_);
 
-        for (int i = 0; i < NB_ROOMS; i++) {
-            grid.getChildAt(i).setEnabled(true);
-        }
+        makeRoomBtnClickable(true);
 
         for (int i = 0; i < NB_ROOMS; i++) {
             ((ImageButton) grid.getChildAt(i)).setImageResource(R.drawable.door_padlock);
