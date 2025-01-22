@@ -387,6 +387,10 @@ public class MainActivity extends AppCompatActivity {
         fightResultContent.setText(R.string.waiting_);
 
         for (int i = 0; i < NB_ROOMS; i++) {
+            grid.getChildAt(i).setEnabled(true);
+        }
+
+        for (int i = 0; i < NB_ROOMS; i++) {
             ((ImageButton) grid.getChildAt(i)).setImageResource(R.drawable.door_padlock);
         }
     }
@@ -457,11 +461,23 @@ public class MainActivity extends AppCompatActivity {
         if (remainingRooms.getText().equals("0")) {
             fightResultContent.setText(R.string.victory);
             nextRound.setVisibility(View.VISIBLE);
+            makeRoomBtnClickable(false);
         }
 
         if (player.getHealth() <= 0) {
             fightResultContent.setText(R.string.defeat);
+            makeRoomBtnClickable(false);
             saveScore();
+        }
+    }
+
+    /**
+     * Active ou désactive le clic sur les boutons des salles
+     * @param enable True s'il faut activer les boutons, false sinon
+     */
+    private void makeRoomBtnClickable(boolean enable){
+        for (int i = 0; i < grid.getChildCount(); i++){
+            grid.getChildAt(i).setEnabled(enable);
         }
     }
 
