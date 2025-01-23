@@ -98,7 +98,6 @@ public class Player implements Parcelable {
      * Initialise les stats du joueur en fonction de son niveau
      */
     public void setDefaultStats() {
-        this.health = config.getDifficulty().getPlayerHealth() * level;
         this.power = config.getDifficulty().getPlayerPower() * level;
     }
 

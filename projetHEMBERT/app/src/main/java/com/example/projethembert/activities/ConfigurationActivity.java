@@ -2,10 +2,10 @@ package com.example.projethembert.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,6 +22,8 @@ import com.example.projethembert.R;
 import com.example.projethembert.entities.enums.Difficulty;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
+import com.example.projethembert.utils.PreferencesKeys;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Objects;
 
@@ -30,26 +33,19 @@ import java.util.Objects;
 public class ConfigurationActivity extends AppCompatActivity {
     /// Configuration de la partie
     private Config config;
-
-    private Config oldConfig;
-
     /// Bouton radio pour la configuration personnalisée
     private RadioButton customButton;
-
     /// Empêche customButton d'être sélectionné systématiquement
     private boolean isUserEditing = false;
-
     /// Input de la puissance max du monstre
     private EditText monsterPower;
-
+    private Config oldConfig;
     /// Input de la santé initiale du joueur
     private EditText playerHp;
-
-    /// Input de la puissance initiale du joueur
-    private EditText playerPower;
-
     /// Input du nom du joueur
     private EditText playerName;
+    /// Input de la puissance initiale du joueur
+    private EditText playerPower;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         config = intent.getParcelableExtra(IntentKeys.CONFIG);
-        oldConfig = config;
+        oldConfig = config.copy();
         boolean isGameRunning = intent.getBooleanExtra(IntentKeys.IS_GAME_RUNNING, true);
 
         RadioGroup difficultyGroup = findViewById(R.id.difficultyGroup);
@@ -77,8 +73,12 @@ public class ConfigurationActivity extends AppCompatActivity {
         playerName = findViewById(R.id.playerName);
         playerName.setText(config.getPlayerName());
 
+        SwitchMaterial themeSwitch = findViewById(R.id.theme);
+        themeSwitch.setChecked(config.isDarkMode());
+        themeSwitch.setOnCheckedChangeListener((button, isChecked) -> toggleTheme(isChecked));
+
         startGame.setOnClickListener(v -> {
-            if (isGameRunning && hasConfigChanged()){
+            if (isGameRunning && hasConfigChanged()) {
                 showRestartGameDialog();
             } else {
                 startGame();
@@ -121,8 +121,17 @@ public class ConfigurationActivity extends AppCompatActivity {
         });
     }
 
+    /// Vérifie si l'utilisateur à changé la configuration
+    private boolean hasConfigChanged() {
+        return !(Objects.equals(config.getPlayerName(), oldConfig.getPlayerName())
+                && config.getDifficulty().getName() == oldConfig.getDifficulty().getName()
+                && config.getDifficulty().getPlayerHealth() == oldConfig.getDifficulty().getPlayerHealth()
+                && config.getDifficulty().getPlayerPower() == oldConfig.getDifficulty().getPlayerPower()
+                && config.getDifficulty().getMaxMonsterPower() == oldConfig.getDifficulty().getMaxMonsterPower());
+    }
+
     /// Sélectionne le radio correspondant à l'ouverture de la page
-    private void initializeRadioButtons(){
+    private void initializeRadioButtons() {
         switch (config.getDifficulty()) {
             case EASY:
                 ((RadioButton) findViewById(R.id.radio_easy)).setChecked(true);
@@ -139,7 +148,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     /// Remplit les valeurs par défaut au changement de difficulté
-    private void onDifficultyChanged(int checkedId){
+    private void onDifficultyChanged(int checkedId) {
         if (!isUserEditing) {
             if (checkedId == R.id.radio_easy) setDefaultValues(Difficulty.EASY);
             else if (checkedId == R.id.radio_medium) setDefaultValues(Difficulty.MEDIUM);
@@ -149,6 +158,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     /// Remplit les valeurs par défaut d'une difficulté
+    ///
     /// @param difficulty Niveau de difficulté choisi
     private void setDefaultValues(Difficulty difficulty) {
         config.setDifficulty(difficulty);
@@ -195,11 +205,16 @@ public class ConfigurationActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean hasConfigChanged(){
-        return !Objects.equals(config.getPlayerName(), oldConfig.getPlayerName())
-                && config.getDifficulty().getName() == oldConfig.getDifficulty().getName()
-                && config.getDifficulty().getPlayerHealth() == oldConfig.getDifficulty().getPlayerHealth()
-                && config.getDifficulty().getPlayerPower() == oldConfig.getDifficulty().getPlayerPower()
-                && config.getDifficulty().getMaxMonsterPower() == oldConfig.getDifficulty().getMaxMonsterPower();
+    /**
+     * Switch entre le thème jour et nuit
+     */
+    private void toggleTheme(boolean isChecked) {
+        SharedPreferences preferences = getSharedPreferences(PreferencesKeys.PREFERENCES, MODE_PRIVATE);
+
+        preferences.edit().putBoolean(PreferencesKeys.THEME, isChecked).apply();
+
+        AppCompatDelegate.setDefaultNightMode(
+                isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
     }
 }

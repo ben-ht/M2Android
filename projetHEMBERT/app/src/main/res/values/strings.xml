@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">projetHEMBERT</string>
     <string name="dungeon_master">Maître du donjon</string>
-    <string name="_10">10</string>
-    <string name="_100">100</string>
+    <string name="_10" translatable="false">10</string>
+    <string name="_100" translatable="false">100</string>
     <string name="fight_result"><b>Résultat du Combat</b></string>
     <string name="waiting">En attente…</string>
     <string name="health__colon">Points de vie :</string>
@@ -14,7 +14,6 @@
     <string name="opponent">ADVERSAIRE</string>
     <string name="attack">Attaque</string>
     <string name="flee">Fuite</string>
-    <string name="waiting_">En attente…</string>
     <string name="victory">Victoire</string>
     <string name="defeat">Défaite</string>
     <string name="fight_won">Vous avez remporté le combat</string>
@@ -25,9 +24,9 @@
     <string name="monster_dragon">Dragon</string>
     <string name="monster_vampire">Vampire</string>
     <string name="room_already_explored">Cette salle à déja été explorée</string>
-    <string name="image_of_the_monster">Image of the monster</string>
-    <string name="_16">16</string>
-    <string name="bonus_image">Image of the bonus</string>
+    <string name="image_of_the_monster">Image du monstre</string>
+    <string name="_16" translatable="false">16</string>
+    <string name="bonus_image">Image du bonus</string>
     <string name="power_charm">Charme de puissance</string>
     <string name="power_charm_desc">Gagne 5 à 10 points de puissance supplémentaire</string>
     <string name="magic_potion">Potion magique</string>
@@ -36,7 +35,7 @@
     <string name="cancel">Annuler</string>
     <string name="level_with_placeholder">"Niveau: %d"</string>
     <string name="niveau_1">Niveau: 1</string>
-    <string name="next_round">Next round</string>
+    <string name="next_round">Manche suivante</string>
     <string name="replay">Rejouer</string>
     <string name="quit">Quitter</string>
     <string name="settings">Paramètres</string>
@@ -53,9 +52,11 @@
     <string name="leaderboard">Tableau des scores</string>
     <string name="restart_game">Redémarrer la partie</string>
     <string name="restart_game_warning">Changer de difficulté arrêtera la partie en cours, êtes vous sur de vouloir continuer ?</string>
-    <string name="player_1">Player 1</string>
+    <string name="player_1">Joueur 1</string>
     <string name="level">Niveau</string>
     <string name="date">Date</string>
     <string name="ok">OK</string>
     <string name="already_explored_msg">La salle a déja été explorée</string>
+    <string name="night_mode">Mode nuit</string>
+    <string name="player_">Joueur</string>
 </resources>

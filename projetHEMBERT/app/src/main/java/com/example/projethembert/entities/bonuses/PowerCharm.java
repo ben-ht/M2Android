@@ -42,6 +42,7 @@ public class PowerCharm implements Bonus {
     /// Nom affiché sur l'UI
     private int name = R.string.power_charm;
 
+    /// Utilisé par reflexion
     public PowerCharm() {
         power = RANDOM.nextInt(MAX_POWER - MIN_POWER + 1) + MIN_POWER;
     }

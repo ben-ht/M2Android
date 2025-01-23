@@ -20,19 +20,19 @@ public abstract class Database extends RoomDatabase {
     /// Instance de la base de données
     private static Database instance;
 
-    /// Table des scores
-    public abstract LeaderboardRepository leaderboardRepository();
-
     /// Retourne l'instance de la base de données si elle existe, sinon la créée
-    public static synchronized Database getInstance(Context context){
-        if (instance == null){
+    public static synchronized Database getInstance(Context context) {
+        if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    Database.class, "leaderboard_db")
+                            Database.class, "leaderboard_db")
                     .fallbackToDestructiveMigration()
                     .build();
         }
 
         return instance;
     }
+
+    /// Table des scores
+    public abstract LeaderboardRepository leaderboardRepository();
 
 }

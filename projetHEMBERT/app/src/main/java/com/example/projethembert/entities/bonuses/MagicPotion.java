@@ -36,6 +36,7 @@ public class MagicPotion implements Bonus {
     /// Nom de la potion affiché sur l'UI
     private int name = R.string.magic_potion;
 
+    /// Utilisé par réflexion
     public MagicPotion() {
         health = RANDOM.nextInt(MAX_HEALTH - MIN_HEALTH + 1) + MIN_HEALTH;
     }

@@ -61,8 +61,25 @@ public class Room implements Parcelable {
         dest.writeParcelable(config, flags);
     }
 
+    public Bonus getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(Bonus bonus) {
+        this.bonus = bonus;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Monster getMonster() {
+        return monster;
+    }
+
     /**
      * Indique si la salle contient un bonus
+     *
      * @return True si la salle contient un bonus, false si elle n'en contient pas ou s'il a été
      * utilisé
      */
@@ -76,21 +93,5 @@ public class Room implements Parcelable {
     public void useBonus(Player player) {
         bonus.use(player);
         bonus = null;
-    }
-
-    public Monster getMonster() {
-        return monster;
-    }
-
-    public Bonus getBonus() {
-        return bonus;
-    }
-
-    public void setBonus(Bonus bonus) {
-        this.bonus = bonus;
-    }
-
-    public int getId() {
-        return id;
     }
 }

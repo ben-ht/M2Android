@@ -68,10 +68,23 @@
             android:text="@string/custom" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/playerHealthLabel"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        android:text="@string/health"
+        android:textColor="@color/secondary"
+        android:padding="4dp"
+        app:layout_constraintTop_toTopOf="@+id/playerHealth"
+        app:layout_constraintBottom_toBottomOf="@+id/playerHealth"
+        app:layout_constraintEnd_toStartOf="@+id/playerPower"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/playerHealth"
         android:layout_width="206dp"
         android:layout_height="wrap_content"
+        android:importantForAutofill="no"
         android:hint="@string/health"
         android:inputType="number"
         android:layout_marginTop="16dp"
@@ -98,6 +111,7 @@
         android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:hint="@string/power"
+        android:importantForAutofill="no"
         android:inputType="number"
         android:layout_marginTop="16dp"
         android:padding="8dp"
@@ -123,6 +137,7 @@
         android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:hint="@string/max_monster_power"
+        android:importantForAutofill="no"
         android:inputType="number"
         android:layout_marginTop="16dp"
         android:padding="8dp"
@@ -148,6 +163,7 @@
         android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:hint="@string/player_name"
+        android:autofillHints="username"
         android:inputType="text"
         android:layout_marginTop="16dp"
         android:padding="8dp"
@@ -179,6 +195,17 @@
         app:layout_constraintStart_toEndOf="@+id/back"
         app:layout_constraintTop_toBottomOf="@+id/playerName"
         style="@style/button"/>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/night_mode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back"
+        app:thumbTint="@color/secondary"
+        app:trackTint="@color/secondaryVariant"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

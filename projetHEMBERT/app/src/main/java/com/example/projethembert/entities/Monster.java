@@ -56,6 +56,7 @@ public class Monster implements Parcelable {
 
     /**
      * Retourne un type de monstre aléatoire
+     *
      * @return Type de monstre
      */
     private static MonsterType randomType() {

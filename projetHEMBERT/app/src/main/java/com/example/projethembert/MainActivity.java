@@ -7,8 +7,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -50,6 +48,7 @@ import com.example.projethembert.entities.enums.FightResultEnum;
 import com.example.projethembert.repository.Database;
 import com.example.projethembert.utils.Config;
 import com.example.projethembert.utils.IntentKeys;
+import com.example.projethembert.utils.PreferencesKeys;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,18 +65,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int NB_BONUSES = 2;
     /// Nombre de salles
     private static final int NB_ROOMS = 16;
-    /// Nom des préférences
-    private static final String PREFERENCES = "Preferences";
-    /// Clé du nom d'utilisateur dans les préférences
-    private static final String USERNAME_KEY = "username";
-    /// Clé du thème dans les préférences
-    private static final String THEME_KEY = "theme";
     /// RNG
     private static final Random random = new Random();
+    /// Permet d'éxécuter une tâche en asynchrone
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     /// Liste des salles
     private final ArrayList<Room> rooms = new ArrayList<>(NB_ROOMS);
-    /// Permet d'éxécuter une tâche en asynchrone
-    ExecutorService executor = Executors.newSingleThreadExecutor();
     /// Configuration de la partie
     private Config config;
     /// Message de résultat de combat
@@ -106,13 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = result.getData();
-                        player = intent.getParcelableExtra(IntentKeys.PLAYER);
-                        FightResult fightResult = intent.getParcelableExtra(IntentKeys.FIGHT_RESULT);
-                        handleFightResult(fightResult);
-                    } else {
-                        Toast.makeText(MainActivity.this, "Une erreur s'est produite lors" +
-                                        "du combat",
-                                Toast.LENGTH_SHORT).show();
+                        if (intent != null) {
+                            player = intent.getParcelableExtra(IntentKeys.PLAYER);
+                            FightResult fightResult = intent.getParcelableExtra(IntentKeys.FIGHT_RESULT);
+                            handleFightResult(fightResult);
+                        }
                     }
                 }
             }
@@ -158,10 +149,6 @@ public class MainActivity extends AppCompatActivity {
             reset(true);
             return true;
         }
-        if (item.getItemId() == R.id.display){
-            toggleTheme();
-            return true;
-        }
         if (item.getItemId() == R.id.quit) {
             finishAffinity();
         }
@@ -171,13 +158,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        config = new Config();
+        SharedPreferences sharedPreferences = getSharedPreferences(PreferencesKeys.PREFERENCES, MODE_PRIVATE);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-        String username = sharedPreferences.getString(USERNAME_KEY, null);
-        boolean isDarkMode = sharedPreferences.getBoolean(THEME_KEY, true);
+        boolean isDarkMode = sharedPreferences.getBoolean(PreferencesKeys.THEME, true);
+
+        config.setDarkMode(isDarkMode);
         AppCompatDelegate.setDefaultNightMode(
                 isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
         );
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -186,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        String username = sharedPreferences.getString(PreferencesKeys.USERNAME, null);
         if (username == null) {
             showUsernameDialog(sharedPreferences);
         } else {
@@ -271,6 +262,21 @@ public class MainActivity extends AppCompatActivity {
         exploredRoomBtn.setImageResource(R.drawable.door_dungeon);
     }
 
+    /**
+     * Gère le clic sur le bouton d'une salle
+     *
+     * @param roomId Id de la salle (de 1 à NB_ROOM)
+     */
+    private void handleRoomBtnClick(int roomId) {
+        if (rooms.get(roomId) == null) {
+            Toast.makeText(MainActivity.this,
+                    R.string.already_explored_msg,
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            openFightActivity(roomId);
+        }
+    }
+
     /// Met à jour l'UI en cas de victoire
     private void handleWin(FightResult fightResult, ImageButton exploredRoomBtn) {
         updateRemainingRoomsCount();
@@ -299,9 +305,10 @@ public class MainActivity extends AppCompatActivity {
 
     /// Initialise le jeu à l'ouverture de l'application
     private void initializeGame(SharedPreferences sharedPreferences) {
-        String username = sharedPreferences.getString(USERNAME_KEY, null);
+        String username = sharedPreferences.getString(PreferencesKeys.USERNAME, null);
 
-        config = new Config(Difficulty.MEDIUM, username);
+        config.setDifficulty(Difficulty.MEDIUM);
+        config.setPlayerName(username);
         player = new Player(config);
 
         fightResultContent = findViewById(R.id.fightResultContent);
@@ -314,6 +321,17 @@ public class MainActivity extends AppCompatActivity {
         nextRound.setOnClickListener(v -> nextRound());
 
         initPlayerAndRooms();
+    }
+
+    /**
+     * Active ou désactive le clic sur les boutons des salles
+     *
+     * @param enable True s'il faut activer les boutons, false sinon
+     */
+    private void makeRoomBtnClickable(boolean enable) {
+        for (int i = 0; i < grid.getChildCount(); i++) {
+            grid.getChildAt(i).setEnabled(enable);
+        }
     }
 
     /**
@@ -384,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void resetGameState(boolean newGame) {
         if (newGame) {
-            isGameRunning = true;
+            isGameRunning = false;
             player = new Player(config);
         } else {
             player.setDefaultStats();
@@ -395,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
      * Réinitialise la grille de bouton et le résultat du combat sur l'UI
      */
     private void resetUIElements() {
-        fightResultContent.setText(R.string.waiting_);
+        fightResultContent.setText(R.string.waiting);
 
         makeRoomBtnClickable(true);
 
@@ -436,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", (dialog, which) -> {
             String username = input.getText().toString().trim();
             if (!username.isBlank()) {
-                preferences.edit().putString(USERNAME_KEY, username).apply();
+                preferences.edit().putString(PreferencesKeys.USERNAME, username).apply();
                 initializeGame(preferences);
             }
         });
@@ -481,16 +499,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Active ou désactive le clic sur les boutons des salles
-     * @param enable True s'il faut activer les boutons, false sinon
-     */
-    private void makeRoomBtnClickable(boolean enable){
-        for (int i = 0; i < grid.getChildCount(); i++){
-            grid.getChildAt(i).setEnabled(enable);
-        }
-    }
-
-    /**
      * Met à jour les stats du joueur sur l'UI
      */
     private void updatePlayerStats() {
@@ -519,33 +527,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             handleLoss(exploredRoomBtn);
         }
-    }
-
-    /**
-     * Gère le clic sur le bouton d'une salle
-     * @param roomId Id de la salle (de 1 à NB_ROOM)
-     */
-    private void handleRoomBtnClick(int roomId){
-        if (rooms.get(roomId) == null){
-            Toast.makeText(MainActivity.this,
-                    R.string.already_explored_msg,
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            openFightActivity(roomId);
-        }
-    }
-
-    private void toggleTheme(){
-        SharedPreferences preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-        boolean isDarkMode = preferences.getBoolean(THEME_KEY, true);
-
-        boolean newMode = !isDarkMode;
-        preferences.edit().putBoolean(THEME_KEY, newMode).apply();
-
-        AppCompatDelegate.setDefaultNightMode(
-                isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
-        );
-
-        recreate(); // TODO doit fonctionner sans recréér
     }
 }

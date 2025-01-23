@@ -15,17 +15,6 @@ import java.util.List;
 @Dao
 public interface LeaderboardRepository {
 
-    /// Insère un LeaderboardEntry en bdd
-    @Insert
-    void insert(LeaderboardEntry entry);
-
-    /**
-     * Récupère les 10 meilleurs scores selon le niveau de difficulté
-     * @param difficulty Niveau de difficulté dans lequel chercher les scores
-     */
-    @Query("Select * FROM leaderboard WHERE difficulty = :difficulty ORDER by levelReached DESC LIMIT 10")
-    List<LeaderboardEntry> getBestScores(String difficulty);
-
     /**
      * Supprime les scores qui sont au delà du top 10 pour ne garder que les 10 meilleurs en bdd
      */
@@ -33,7 +22,20 @@ public interface LeaderboardRepository {
     void deleteExcessScores(String difficulty);
 
     /**
+     * Récupère les 10 meilleurs scores selon le niveau de difficulté
+     *
+     * @param difficulty Niveau de difficulté dans lequel chercher les scores
+     */
+    @Query("Select * FROM leaderboard WHERE difficulty = :difficulty ORDER by levelReached DESC, power DESC LIMIT 10")
+    List<LeaderboardEntry> getBestScores(String difficulty);
+
+    /// Insère un LeaderboardEntry en bdd
+    @Insert
+    void insert(LeaderboardEntry entry);
+
+    /**
      * Insère un score en bdd seulement s'il fait partie du top 10
+     *
      * @param entry Score
      */
     @Transaction

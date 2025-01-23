@@ -1,10 +1,5 @@
 package com.example.projethembert.activities;
 
-import static com.example.projethembert.entities.enums.Difficulty.DB_EASY;
-import static com.example.projethembert.entities.enums.Difficulty.DB_HARD;
-import static com.example.projethembert.entities.enums.Difficulty.DB_MEDIUM;
-import static com.example.projethembert.entities.enums.Difficulty.HARD;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

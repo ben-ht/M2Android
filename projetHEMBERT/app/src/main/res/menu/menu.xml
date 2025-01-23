@@ -14,10 +14,6 @@
         android:title="@string/replay"
         app:showAsAction="never" />
 
-    <item android:id="@+id/display"
-        android:title="Affichage"
-        app:showAsAction="never" />
-
     <item android:id="@+id/quit"
         android:title="@string/quit"
         app:showAsAction="never" />
